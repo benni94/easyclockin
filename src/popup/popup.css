@@ -1,0 +1,87 @@
+body {
+    min-width: 190px;
+}
+
+button {
+    border: none;
+}
+
+
+input:checked+.slider {
+    background-color: #2196F3;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+
+.panel-group .panel {
+    border-radius: 0;
+    box-shadow: none;
+    border-color: #EEEEEE;
+}
+
+.panel-default>.panel-heading {
+    padding: 0;
+    border-radius: 0;
+    color: #212121;
+    background-color: #FAFAFA;
+    border-color: #EEEEEE;
+}
+
+.panel-title {
+    font-size: 14px;
+}
+
+.panel-title>a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+}
+
+.more-less {
+    float: right;
+    color: #212121;
+}
+
+.panel-default>.panel-heading+.panel-collapse>.panel-body {
+    border-top-color: #EEEEEE;
+}
+
+/* collaps */
+
+.collapsible {
+    cursor: pointer;
+    font-size: 20px;
+    background-color: white;
+}
+
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+}
+
+/* collaps end */
+
+.buttonExecuteWrapper {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.switcherHolder {
+    text-align: center;
+}
+
+.collapseContent {
+    text-align: center;
+}

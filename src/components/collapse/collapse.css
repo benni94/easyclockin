@@ -1,0 +1,10 @@
+.collapsible {
+    cursor: pointer;
+    font-size: 20px;
+    background-color: white;
+}
+
+.content {
+    padding: 0 18px;
+    overflow: hidden;
+}
