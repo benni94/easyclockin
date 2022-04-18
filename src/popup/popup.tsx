@@ -14,19 +14,30 @@ const Popup: React.FC<IPopupProps> = (props) => {
     console.log(e);
   }, []);
 
+  const formResult = (result: any) => {
+    result.preventDefault();
+    console.log(result.target[0].value);
+    console.log(result.target[1].value);
+  };
+
   return (
     <div>
       <br />
       <Collapse
         content={
           <div className="collapseContent">
-            <Input label="Username:" variant="standard" />
-            <Input
-              label="Password:"
-              type="password"
-              marginTop="5px"
-              variant="standard"
-            />
+            <form onSubmit={formResult}>
+              <Input label="Username:" variant="standard" />
+              <Input
+                label="Password:"
+                type="password"
+                marginTop="5px"
+                variant="standard"
+              />
+              <br />
+              <DefaultButton type="submit" title="Set" variant="contained" />
+              {/* TODO:  disabled ?? */}
+            </form>
           </div>
         }
       />
@@ -43,12 +54,7 @@ const Popup: React.FC<IPopupProps> = (props) => {
         <DefaultButton
           onClick={() => alert("Clear")}
           title="Clear"
-          type="outlined"
-        />
-        <DefaultButton
-          onClick={() => alert("Login")}
-          title="Login"
-          type="contained"
+          variant="outlined"
         />
       </div>
     </div>

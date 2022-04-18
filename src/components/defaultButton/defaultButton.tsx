@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
 type Color = "error" | "success" | "secondary";
 type Variant = "contained" | "outlined" | "text";
@@ -8,14 +8,15 @@ type Size = "small" | "medium" | "large";
 export type IDefaultButtonProps = {
   color?: Color;
   disabled?: boolean;
-  onClick: <T>(arg: T | undefined) => T | void;
+  onClick?: <T>(arg: T | undefined) => T | void;
   title: string;
+  type?: "submit" | "reset" | "button" | undefined;
   size?: Size;
-  type?: Variant;
+  variant?: Variant;
 };
 
 const DefaultButton: React.FC<IDefaultButtonProps> = (props) => {
-  const { color, disabled, onClick, title, size, type } = props;
+  const { color, disabled, onClick, title, type, size, variant } = props;
 
   return (
     <Button
@@ -23,7 +24,8 @@ const DefaultButton: React.FC<IDefaultButtonProps> = (props) => {
       disabled={disabled}
       onClick={onClick}
       size={size}
-      variant={type}
+      type={type}
+      variant={variant}
     >
       {title}
     </Button>

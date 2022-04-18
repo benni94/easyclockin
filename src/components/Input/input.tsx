@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 
 type Variant = "filled" | "outlined" | "standard";
 type Type = "password";
@@ -7,18 +7,31 @@ type Size = "small";
 
 export type IInputProps = {
   label: string;
+  input?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  marginTop?: string;
   size?: Size;
   type?: Type;
   variant: Variant;
-  marginTop?: string;
 };
 
 const Input: React.FC<IInputProps> = (props) => {
-  const { label, marginTop, size, type, variant } = props;
+  const { input, label, marginTop, size, type, variant } = props;
+
+  const handleTextInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (input) input(event);
+  };
 
   return (
     <div style={{ marginTop: marginTop }}>
-      <TextField label={label} size={size} type={type} variant={variant} />
+      <TextField
+        onChange={handleTextInputChange}
+        label={label}
+        size={size}
+        type={type}
+        variant={variant}
+      />
     </div>
   );
 };
