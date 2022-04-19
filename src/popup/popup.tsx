@@ -1,14 +1,18 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
 import { Input } from "../components/Input/input";
 import { Switcher } from "../components/switcher/switcher";
+import { navigateToUrl } from "../functions/chrome";
+
 import "./popup.css";
 
 export type IPopupProps = {};
 
 const Popup: React.FC<IPopupProps> = (props) => {
   const {} = props;
+
+  navigateToUrl();
 
   const switcherResult = useCallback((e: boolean) => {
     console.log(e);

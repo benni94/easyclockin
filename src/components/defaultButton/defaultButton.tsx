@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import React, { ButtonHTMLAttributes } from "react";
+import React from "react";
 
 type Color = "error" | "success" | "secondary";
 type Variant = "contained" | "outlined" | "text";
