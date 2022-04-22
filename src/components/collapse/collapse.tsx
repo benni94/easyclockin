@@ -14,7 +14,11 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
     <div>
       <DefaultButton
         onClick={() => setCollapsed((collapsed) => !collapsed)}
-        title={collapsed ? "➕" : "➖"}
+        title={
+          collapsed
+            ? "\u00AD ➕ \u00AD first Page"
+            : "\u00AD ➖ \u00a0 first Page"
+        }
         size="small"
       />
       {!collapsed && <Fragment>{content}</Fragment>}

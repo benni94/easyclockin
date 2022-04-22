@@ -38,7 +38,14 @@ const Popup: React.FC<IPopupProps> = (props) => {
                 marginTop="5px"
                 variant="standard"
               />
-              <br />
+              <div id="switchHolder">
+                <Switcher
+                  checkedLabel={{ isChecked: " on", isNotChecked: " off" }}
+                  isChecked={switcherResult}
+                  label="Autologin"
+                />
+              </div>
+
               <DefaultButton type="submit" title="Set" variant="contained" />
               {/* TODO:  disabled ?? */}
             </form>
@@ -46,13 +53,6 @@ const Popup: React.FC<IPopupProps> = (props) => {
         }
       />
       <br />
-      <div className="switcherHolder">
-        <Switcher
-          checkedLabel={{ isChecked: " on", isNotChecked: " off" }}
-          isChecked={switcherResult}
-          label="Autologin"
-        />
-      </div>
 
       <div className="buttonExecuteWrapper">
         <DefaultButton

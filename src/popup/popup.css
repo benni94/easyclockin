@@ -85,3 +85,7 @@ input:checked+.slider:before {
 .collapseContent {
     text-align: center;
 }
+
+#switchHolder {
+    padding: 10px
+}
