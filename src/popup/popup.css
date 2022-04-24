@@ -89,3 +89,20 @@ input:checked+.slider:before {
 #switchHolder {
     padding: 10px
 }
+
+.setResetWrapper {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.inputChildWrapper {
+    display: flex;
+    justify-content: space-around;
+}
+
+.iconInputWrapper {
+    margin-top: 5px;
+    margin-left: 40px;
+}

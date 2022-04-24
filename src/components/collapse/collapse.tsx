@@ -4,10 +4,11 @@ import "./collapse.css";
 
 export type ICollapseProps = {
   content: ReactNode;
+  label?: string;
 };
 
 const Collapse: React.FC<ICollapseProps> = (props) => {
-  const { content } = props;
+  const { content, label } = props;
   const [collapsed, setCollapsed] = useState(true);
 
   return (
@@ -15,9 +16,7 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
       <DefaultButton
         onClick={() => setCollapsed((collapsed) => !collapsed)}
         title={
-          collapsed
-            ? "\u00AD ➕ \u00AD first Page"
-            : "\u00AD ➖ \u00a0 first Page"
+          collapsed ? `\u00AD ➕ \u00AD ${label}` : `\u00AD ➖ \u00a0 ${label}`
         }
         size="small"
       />

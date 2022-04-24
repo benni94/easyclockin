@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import React, { memo } from "react";
+import React from "react";
 
 type Variant = "filled" | "outlined" | "standard";
 type Type = "password";
