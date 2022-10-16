@@ -27,15 +27,16 @@ export function startLogin(data: FormValues) {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
       func: (data: FormValues) => {
-        let username = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
-        username.value = data.username; //test
+        if (window.document.URL === data.linkToPage) {
+          let username = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
+          username.value = data.username;
 
-        let password = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
-        password.value = data.password; //test
+          let password = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
+          password.value = data.password;
 
-        // document.getElementsByName(data.htmlButton)[0].click(); //input
-        const test = document.getElementsByTagName(data.htmlButton)[2] as HTMLElement;
-        test.click();
+          const button = document.getElementsByTagName(data.htmlButton)[2] as HTMLElement;
+          button.click();
+        }
       },
       args: [data],
     });

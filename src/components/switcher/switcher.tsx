@@ -8,6 +8,10 @@ export type ISwitcherProps = {
      */
     checkedLabel: { isChecked: string, isNotChecked: string };
     /**
+     * Set the default state of the switcher.
+     */
+    defaultChecked: boolean;
+    /**
      * returns the boolean if the switch is checked
      */
     isChecked: (check: boolean) => void;
@@ -19,7 +23,7 @@ export type ISwitcherProps = {
 
 
 const Switcher: React.FC<ISwitcherProps> = (props) => {
-    const { checkedLabel, isChecked, label, } = props;
+    const { checkedLabel, defaultChecked, isChecked, label, } = props;
     const [checked, setChecked] = useState(false);
 
     const setCheck = useCallback((e: any) => {
@@ -28,7 +32,7 @@ const Switcher: React.FC<ISwitcherProps> = (props) => {
     }, [checked, isChecked])
 
     return (
-        <FormControlLabel onChange={setCheck} control={<Switch />} label={<Typography sx={{ color: 'black' }}>
+        <FormControlLabel onChange={setCheck} control={<Switch defaultChecked={defaultChecked} />} label={<Typography sx={{ color: 'black' }}>
             {label} {checked ? checkedLabel.isChecked : checkedLabel.isNotChecked}
         </Typography>} />
     );
