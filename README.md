@@ -45,6 +45,30 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+page to test : http://testphp.vulnweb.com/login.php
+
+## to build a client secret
+
+=> https://dev.to/bayardlouis470/create-chrome-extension-in-react-3pna
+
 ## Build the script
 
+first change the "build" in package.json to 
+
+=> "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
+
 => yarn build script
+
+=> npm run build
+
+then go to chrome extensions, manage extension and load unpacked to test it
+
+after that, you can build and click in the management extensions `update`
+
+
+https://medium.com/litslink/how-to-create-google-chrome-extension-using-react-js-5c9e343323ffs
+
+to pack and make it usable in the app store
+https://github.com/lxieyang/chrome-extension-boilerplate-react
+
+=> NODE_ENV=production npm run build

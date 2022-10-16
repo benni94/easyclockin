@@ -8,7 +8,7 @@ type Size = "small" | "medium" | "large";
 export type IDefaultButtonProps = {
   color?: Color;
   disabled?: boolean;
-  onClick?: <T>(arg: T | undefined) => T | void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
   title: string;
   type?: "submit" | "reset" | "button" | undefined;
   size?: Size;
