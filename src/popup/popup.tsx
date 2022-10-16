@@ -15,7 +15,6 @@ export type FormValues = {
   htmlUsername: string;
   htmlPassword: string;
   htmlButton: string;
-  switcherEnabled: boolean;
 };
 
 const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {

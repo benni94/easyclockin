@@ -3,23 +3,22 @@ import { FormValues } from './../popup/popup';
 export const chromeLocalStorageItem = "savings";
 const switcherLocalStorageItem = "switcher";
 
-/* const formValuesDefaults: FormValues = {
+export const formValuesDefaults: FormValues = {
     htmlButton: "Submit",
     htmlPassword: "PINCODE",
     htmlUsername: "AUSWEISNR",
     linkToPage: "http://s-at00-163.meusburger-norm.com/s-at00-162_cwpdb1_cronet/!MAServ.MAServ_Main",
     password: "",
     username: ""
-} */
-export const formValuesDefaults: FormValues = {
+}
+/* export const formValuesDefaults: FormValues = {
     htmlButton: "input",
     htmlPassword: "pass",
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",
     password: "",
     username: "",
-    switcherEnabled: false
-}
+} */
 
 export const savings = (data?: FormValues) => {
     const toLocalStorage = () => {
