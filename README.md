@@ -1,7 +1,6 @@
 #Build to download:
 
-https://github.com/benni94/easylogin/tree/master/build
-
+<a href="https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/benni94/easylogin/tree/master/build" download>Click to Download</a>
 
 # Getting Started with Create React App
 
