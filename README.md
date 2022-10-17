@@ -72,5 +72,3 @@ to pack and make it usable in the app store
 https://github.com/lxieyang/chrome-extension-boilerplate-react
 
 => NODE_ENV=production npm run build
-
-document.querySelectorAll(`input[type=${data.htmlButton}]`).forEach(el => {const button = el as HTMLElement; button.click();});
