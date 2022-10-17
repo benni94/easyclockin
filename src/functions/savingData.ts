@@ -4,7 +4,7 @@ export const chromeLocalStorageItem = "savings";
 const switcherLocalStorageItem = "switcher";
 
 export const formValuesDefaults: FormValues = {
-    htmlButton: "Submit",
+    htmlButton: "input[type=submit]",
     htmlPassword: "PINCODE",
     htmlUsername: "AUSWEISNR",
     linkToPage: "http://s-at00-163.meusburger-norm.com/s-at00-162_cwpdb1_cronet/!MAServ.MAServ_Main",
@@ -12,7 +12,7 @@ export const formValuesDefaults: FormValues = {
     username: ""
 }
 /* export const formValuesDefaults: FormValues = {
-    htmlButton: "input",
+    htmlButton: "input[type=submit]",
     htmlPassword: "pass",
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",

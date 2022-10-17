@@ -34,7 +34,7 @@ export function startLogin(data: FormValues) {
           let password = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
           password.value = data.password;
 
-          const button = document.getElementsByTagName(data.htmlButton)[2] as HTMLElement;
+          const button = document.querySelectorAll(data.htmlButton)[2] as HTMLElement;
           button.click();
         }
       },
