@@ -86,14 +86,10 @@ input:checked+.slider:before {
     text-align: center;
 }
 
-#switchHolder {
-    padding: 30px
-}
-
 .setResetWrapper {
     display: flex;
     justify-content: space-evenly;
-    padding-top: 30px;
+    padding-top: 60px;
 }
 
 .inputChildWrapper {

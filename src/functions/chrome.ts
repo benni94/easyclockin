@@ -34,11 +34,16 @@ export function startLogin(data: FormValues) {
           let password = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
           password.value = data.password;
 
-          const button = document.querySelectorAll(data.htmlButton)[2] as HTMLElement;
-          button.click();
+          document.querySelectorAll(`input[type=${data.htmlButton}]`).forEach(el => { const button = el as HTMLElement; button.click(); });
+          return true;
         }
+        return false;
       },
       args: [data],
+    }).then(results => {
+      if (results[0].result) {
+        window.close();
+      }
     });
   });
 }

@@ -23,7 +23,6 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
 
   useEffect(() => {
     startLogin(savings().getDataFromLocalStorage());
-    //window.close();
   }, []);
 
   const navigate = useCallback(() => {
@@ -106,17 +105,6 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                       />
                     </div>
                   </div>
-                </div>
-                <div id="switchHolder">
-                  {/*   <Switcher
-                    checkedLabel={{
-                      isChecked: " on",
-                      isNotChecked: " off",
-                    }}
-                    defaultChecked={switcherSavings().getDataFromLocalStorage()}
-                    isChecked={(event: boolean) => switcherSavings(event).toLocalStorage()}
-                    label="Autologin"
-                  /> */}
                 </div>
                 <div className="setResetWrapper">
                   <DefaultButton
