@@ -1,9 +1,9 @@
 import { Divider } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
 import { Input } from "../components/Input/input";
-import { navigateToUrl, startLogin } from "../functions/chrome";
+import { navigateToUrl, startLogin, getCurrentUrl } from "../functions/chrome";
 import "./popup.css";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { formValuesDefaults, savings } from "../functions/savingData";
@@ -12,6 +12,8 @@ export type FormValues = {
   linkToPage: string;
   username: string;
   password: string;
+  clockIn: string;
+  clockOut: string;
   htmlUsername: string;
   htmlPassword: string;
   htmlButton: string;
@@ -19,15 +21,25 @@ export type FormValues = {
 
 const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset } = useForm<FormValues>({ mode: "onChange" });
-  const onSubmit: SubmitHandler<FormValues> = result => savings(result).toLocalStorage();
+  const onSubmit: SubmitHandler<FormValues> = result => savings().toLocalStorage(result);
+  const [onLoginUrl, setOnLoginUrl] = useState(false);
 
   useEffect(() => {
-    startLogin(savings().getDataFromLocalStorage());
+    //startLogin(savings().getDataFromLocalStorage());
+    getCurrentUrl().then((currentUrl) => {
+      currentUrl === savings().getDataFromLocalStorage().linkToPage ? setOnLoginUrl(true) : setOnLoginUrl(false);
+    })
   }, []);
 
   const navigate = useCallback(() => {
     navigateToUrl(savings().getDataFromLocalStorage().linkToPage);
   }, []);
+
+
+  const clockInClockOut = useCallback((clockIn: boolean) => {
+    startLogin(savings().getDataFromLocalStorage(), clockIn);
+  }, []);
+
 
   const clear = useCallback(() => {
     reset(formValuesDefaults);
@@ -49,10 +61,30 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                     {...(register("linkToPage", { required: true }))}
                     width={420}
                     defaultValue={savings().getDataFromLocalStorage().linkToPage}
-                    label="Link to Page:"
+                    label="Link to page:"
                     variant="standard"
                     id="linkToPage"
                   />
+                  <div className="inputStyle">
+                    <Input
+                      {...(register("clockIn", { required: true }))}
+                      width={420}
+                      defaultValue={savings().getDataFromLocalStorage().clockIn}
+                      label="Name of clock in:"
+                      variant="standard"
+                      id="linkToCome"
+                    />
+                  </div>
+                  <div className="inputStyle">
+                    <Input
+                      {...(register("clockOut", { required: true }))}
+                      width={420}
+                      defaultValue={savings().getDataFromLocalStorage().clockOut}
+                      label="Name of clock out:"
+                      variant="standard"
+                      id="linkToGo"
+                    />
+                  </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", marginTop: "20px" }}>
                   <div style={{ display: "flex", flexDirection: "column" }}>
@@ -130,11 +162,27 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
         />
       </div>
       <div className="buttonExecuteWrapper">
-        <DefaultButton
-          onClick={navigate}
-          title="Go to url"
-          variant="contained"
-        />
+        {onLoginUrl ?
+          <>
+            <DefaultButton
+              onClick={() => clockInClockOut(true)}
+              title="Clock in"
+              variant="contained"
+            />
+            <DefaultButton
+              onClick={() => clockInClockOut(false)}
+              title="Clock out"
+              variant="contained"
+            />
+          </>
+          :
+          <DefaultButton
+            onClick={navigate}
+            title="Go to url"
+            variant="contained"
+          />
+        }
+
       </div>
     </div>
   );

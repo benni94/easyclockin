@@ -15,7 +15,7 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
 
   const collapse = useCallback(() => {
     setCollapsed((collapsed) => !collapsed);
-    !collapsed ? appWidth(200) : appWidth(600);
+    !collapsed ? appWidth(280) : appWidth(600);
   }, [appWidth, collapsed]);
 
 

@@ -22,16 +22,23 @@ export function navigateToUrl(url: string) {
   });
 }
 
-export function startLogin(data: FormValues) {
+export async function getCurrentUrl() {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab.url
+}
+
+export function startLogin(data: FormValues, clockIn: boolean) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
       func: (data: FormValues) => {
         if (window.document.URL === data.linkToPage) {
-          let username = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
+
+          const username = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
           username.value = data.username;
 
-          let password = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
+          const password = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
           password.value = data.password;
 
           document.querySelectorAll(`input[type=${data.htmlButton}]`).forEach(el => { const button = el as HTMLElement; button.click(); });
@@ -41,9 +48,32 @@ export function startLogin(data: FormValues) {
       },
       args: [data],
     }).then(results => {
-      if (results[0].result) {
-        window.close();
-      }
+
+      setTimeout(() => {
+        chrome.scripting.executeScript({
+          target: { tabId: tabs[0].id || 0 },
+          func: (data: FormValues, clockIn: boolean) => {
+            const items = document.body.getElementsByTagName("a");
+            if (clockIn) {
+              for (let i = 0; i < items.length; ++i) {
+                if (items[i].textContent === data.clockIn) {
+                  items[i].click();
+                }
+              }
+            } else {
+              for (let i = 0; i < items.length; ++i) {
+                if (items[i].textContent === data.clockOut) {
+                  items[i].click();
+                }
+              }
+            }
+          },
+          args: [data, clockIn],
+        })
+        if (results[0].result) {
+          window.close();
+        }
+      }, 2000);
     });
   });
 }

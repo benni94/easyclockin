@@ -50,8 +50,9 @@
   },
   "content_scripts": [
     {
+      "run_at": "document_end",
       "matches": [
-        "http://testphp.vulnweb.com/login.php"
+        "<all_urls>"
       ],
       "css": [
         "/static/css/app.css",
