@@ -1,3 +1,7 @@
+#Build to download:
+
+<a href="https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/benni94/easylogin/tree/master/build" download>Click to Download</a>
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
