@@ -28,52 +28,47 @@ export async function getCurrentUrl() {
   return tab.url
 }
 
-export function startLogin(data: FormValues, clockIn: boolean) {
+export function startLogin(data: FormValues, clockIn: boolean, password: string) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
-      func: (data: FormValues) => {
+      func: (data: FormValues, password: string) => {
         if (window.document.URL === data.linkToPage) {
 
-          const username = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
-          username.value = data.username;
+          const usernameHtml = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
+          usernameHtml.value = data.username;
 
-          const password = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
-          password.value = data.password;
+          const passwordHtml = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
+          passwordHtml.value = password;
 
           document.querySelectorAll(`input[type=${data.htmlButton}]`).forEach(el => { const button = el as HTMLElement; button.click(); });
           return true;
         }
         return false;
       },
-      args: [data],
-    }).then(results => {
+      args: [data, password],
+    })
+      .then(results => {
+        chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab,) => {
+          if (changeInfo.status === 'complete') {
+            chrome.scripting.executeScript({
+              target: { tabId: tabs[0].id || 0 },
+              func: (data: FormValues, clockIn: boolean) => {
+                const items = document.body.getElementsByTagName("a");
 
-      setTimeout(() => {
-        chrome.scripting.executeScript({
-          target: { tabId: tabs[0].id || 0 },
-          func: (data: FormValues, clockIn: boolean) => {
-            const items = document.body.getElementsByTagName("a");
-            if (clockIn) {
-              for (let i = 0; i < items.length; ++i) {
-                if (items[i].textContent === data.clockIn) {
-                  items[i].click();
+                for (let i = 0; i < items.length; ++i) {
+                  if (items[i].textContent === (clockIn ? data.clockIn : data.clockOut)) {
+                    items[i].click();
+                  }
                 }
-              }
-            } else {
-              for (let i = 0; i < items.length; ++i) {
-                if (items[i].textContent === data.clockOut) {
-                  items[i].click();
-                }
-              }
+              },
+              args: [data, clockIn],
+            })
+            if (results[0].result) {
+              window.close();
             }
-          },
-          args: [data, clockIn],
+          }
         })
-        if (results[0].result) {
-          window.close();
-        }
-      }, 2000);
-    });
+      });
   });
 }

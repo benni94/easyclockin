@@ -3,7 +3,7 @@ import "./App.css";
 import { Popup } from "./popup/popup";
 
 function App() {
-  const [width, setWidth] = useState("280px");
+  const [width, setWidth] = useState("200px");
 
   const appWidth = useCallback((size: number) => {
     setWidth(size + "px")

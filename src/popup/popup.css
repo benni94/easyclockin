@@ -73,7 +73,7 @@ input:checked+.slider:before {
 
 .buttonExecuteWrapper {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     margin-top: 30px;
     margin-bottom: 30px;
 }
@@ -89,7 +89,7 @@ input:checked+.slider:before {
 .setResetWrapper {
     display: flex;
     justify-content: space-evenly;
-    padding-top: 60px;
+    padding-top: 30px;
 }
 
 .inputChildWrapper {

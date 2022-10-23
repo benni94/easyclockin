@@ -5,18 +5,21 @@ import "./collapse.css";
 export type ICollapseProps = {
   appWidth: (size: number) => void
   content: ReactNode;
-  label?: string;
+  labelOpen?: string;
+  labelCollapsed: string;
+  collapsedWidth: number;
+  openWidth: number;
 };
 
 const Collapse: React.FC<ICollapseProps> = (props) => {
-  const { appWidth, content, label } = props;
+  const { appWidth, content, labelCollapsed, labelOpen, collapsedWidth, openWidth } = props;
   const [collapsed, setCollapsed] = useState(true);
 
 
   const collapse = useCallback(() => {
     setCollapsed((collapsed) => !collapsed);
-    !collapsed ? appWidth(280) : appWidth(600);
-  }, [appWidth, collapsed]);
+    !collapsed ? appWidth(collapsedWidth) : appWidth(openWidth);
+  }, [appWidth, collapsed, collapsedWidth, openWidth]);
 
 
   return (
@@ -25,7 +28,7 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
         <DefaultButton
           onClick={collapse}
           title={
-            collapsed ? `\u00AD  ${label}\u00AD ➕ ` : `\u00AD  ${label} \u00a0➖ `
+            collapsed ? `\u00AD  ${labelCollapsed}` : `\u00AD  ${labelOpen}`
           }
           size="small"
         />

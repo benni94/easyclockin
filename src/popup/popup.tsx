@@ -20,12 +20,11 @@ export type FormValues = {
 };
 
 const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
-  const { register, handleSubmit, formState: { isDirty, isValid }, reset } = useForm<FormValues>({ mode: "onChange" });
+  const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
   const onSubmit: SubmitHandler<FormValues> = result => savings().toLocalStorage(result);
   const [onLoginUrl, setOnLoginUrl] = useState(false);
 
   useEffect(() => {
-    //startLogin(savings().getDataFromLocalStorage());
     getCurrentUrl().then((currentUrl) => {
       currentUrl === savings().getDataFromLocalStorage().linkToPage ? setOnLoginUrl(true) : setOnLoginUrl(false);
     })
@@ -37,8 +36,8 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
 
 
   const clockInClockOut = useCallback((clockIn: boolean) => {
-    startLogin(savings().getDataFromLocalStorage(), clockIn);
-  }, []);
+    startLogin(savings().getDataFromLocalStorage(), clockIn, getValues().password);
+  }, [getValues]);
 
 
   const clear = useCallback(() => {
@@ -52,40 +51,79 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
       <div>
         <Collapse
           appWidth={appWidth}
-          label={"Settings:"}
+          labelCollapsed="Settings: ➕"
+          labelOpen="Settings: ➖"
+          collapsedWidth={200}
+          openWidth={200}
           content={
             <div className="collapseContent">
+
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="inputStyle">
-                  <Input
-                    {...(register("linkToPage", { required: true }))}
-                    width={420}
-                    defaultValue={savings().getDataFromLocalStorage().linkToPage}
-                    label="Link to page:"
-                    variant="standard"
-                    id="linkToPage"
-                  />
-                  <div className="inputStyle">
-                    <Input
-                      {...(register("clockIn", { required: true }))}
-                      width={420}
-                      defaultValue={savings().getDataFromLocalStorage().clockIn}
-                      label="Name of clock in:"
-                      variant="standard"
-                      id="linkToCome"
-                    />
-                  </div>
-                  <div className="inputStyle">
-                    <Input
-                      {...(register("clockOut", { required: true }))}
-                      width={420}
-                      defaultValue={savings().getDataFromLocalStorage().clockOut}
-                      label="Name of clock out:"
-                      variant="standard"
-                      id="linkToGo"
-                    />
-                  </div>
-                </div>
+                <Collapse
+                  appWidth={appWidth}
+                  collapsedWidth={200}
+                  openWidth={600}
+                  content={
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Input
+                        {...(register("linkToPage"))}
+                        width={420}
+                        defaultValue={savings().getDataFromLocalStorage().linkToPage}
+                        label="Link to page:"
+                        variant="standard"
+                        id="linkToPage"
+                      />
+                      <Input
+                        {...(register("clockIn"))}
+                        width={170}
+                        margin="normal"
+                        defaultValue={savings().getDataFromLocalStorage().clockIn}
+                        label="Name of clock in:"
+                        variant="standard"
+                        id="linkToCome"
+                      />
+                      <Input
+                        {...(register("clockOut"))}
+                        width={170}
+                        margin="dense"
+                        defaultValue={savings().getDataFromLocalStorage().clockOut}
+                        label="Name of clock out:"
+                        variant="standard"
+                        id="linkToGo"
+                      />
+                      <Input
+                        {...register("htmlUsername")}
+                        width={170}
+                        margin="dense"
+                        defaultValue={savings().getDataFromLocalStorage().htmlUsername}
+                        label="Html Element Username:"
+                        variant="standard"
+                        id="htmlUsername"
+                      />
+                      <Input
+                        {...register("htmlPassword")}
+                        width={170}
+                        margin="dense"
+                        defaultValue={savings().getDataFromLocalStorage().htmlPassword}
+                        label="Html Element Password:"
+                        variant="standard"
+                        id="htmlPassword"
+                      />
+                      <Input
+                        {...register("htmlButton")}
+                        width={170}
+                        margin="dense"
+                        defaultValue={savings().getDataFromLocalStorage().htmlButton}
+                        label="Html Element Button:"
+                        variant="standard"
+                        id="htmlButton"
+                      />
+                    </div>
+                  }
+                  labelCollapsed="Advanced ⚙️"
+                  labelOpen="⚙️"
+                />
+
                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", marginTop: "20px" }}>
                   <div style={{ display: "flex", flexDirection: "column" }}>
                     <div className="inputStyle">
@@ -97,7 +135,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         id="username"
                       />
                     </div>
-                    <div className="inputStyle">
+                    {/*   <div className="inputStyle">
                       <Input
                         {...register("password", { required: true })}
                         defaultValue={savings().getDataFromLocalStorage().password}
@@ -106,37 +144,9 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         variant="standard"
                         id="password"
                       />
-                    </div>
+                    </div> */}
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div className="inputStyle">
-                      <Input
-                        {...register("htmlUsername", { required: true })}
-                        defaultValue={savings().getDataFromLocalStorage().htmlUsername}
-                        label="Html Element Username:"
-                        variant="standard"
-                        id="htmlUsername"
-                      />
-                    </div>
-                    <div className="inputStyle">
-                      <Input
-                        {...register("htmlPassword", { required: true })}
-                        defaultValue={savings().getDataFromLocalStorage().htmlPassword}
-                        label="Html Element Password:"
-                        variant="standard"
-                        id="htmlPassword"
-                      />
-                    </div>
-                    <div className="inputStyle">
-                      <Input
-                        {...register("htmlButton", { required: true })}
-                        defaultValue={savings().getDataFromLocalStorage().htmlButton}
-                        label="Html Element Button:"
-                        variant="standard"
-                        id="htmlButton"
-                      />
-                    </div>
-                  </div>
+
                 </div>
                 <div className="setResetWrapper">
                   <DefaultButton
@@ -157,23 +167,36 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                   sx={{ height: 45, m: 0.5 }}
                   orientation="horizontal" />
               </form>
-            </div>
+            </div >
           }
         />
-      </div>
+      </div >
       <div className="buttonExecuteWrapper">
         {onLoginUrl ?
           <>
-            <DefaultButton
-              onClick={() => clockInClockOut(true)}
-              title="Clock in"
-              variant="contained"
-            />
-            <DefaultButton
-              onClick={() => clockInClockOut(false)}
-              title="Clock out"
-              variant="contained"
-            />
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <Input
+                autoFocus
+                {...register("password")}
+                width={118}
+                label="Password:"
+                type="password"
+                variant="standard"
+                id="password"
+              />
+              <DefaultButton
+                color="success"
+                onClick={() => clockInClockOut(true)}
+                title="Clock in"
+                variant="outlined"
+              />
+              <DefaultButton
+                color="secondary"
+                onClick={() => clockInClockOut(false)}
+                title="Clock out"
+                variant="outlined"
+              />
+            </div>
           </>
           :
           <DefaultButton
@@ -184,7 +207,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
         }
 
       </div>
-    </div>
+    </div >
   );
 };
 

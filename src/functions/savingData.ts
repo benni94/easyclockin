@@ -2,7 +2,7 @@ import { FormValues } from './../popup/popup';
 
 export const chromeLocalStorageItem = "savings";
 
-/* export const formValuesDefaults: FormValues = {
+export const formValuesDefaults: FormValues = {
     clockIn: "Kommt",
     clockOut: "Geht",
     htmlButton: "submit",
@@ -11,9 +11,9 @@ export const chromeLocalStorageItem = "savings";
     linkToPage: "http://s-at00-163.meusburger-norm.com/s-at00-162_cwpdb1_cronet/!MAServ.MAServ_Main",
     password: "",
     username: ""
-} */
+}
 
-export const formValuesDefaults: FormValues = {
+/* export const formValuesDefaults: FormValues = {
     clockIn: "The shore",
     clockOut: "Walking",
     htmlButton: "submit",
@@ -22,11 +22,15 @@ export const formValuesDefaults: FormValues = {
     linkToPage: "http://testphp.vulnweb.com/login.php",
     password: "",
     username: "",
-}
+} */
 
 export const savings = () => {
 
     const toLocalStorage = (data: FormValues) => {
+        if (!data.linkToPage || data.linkToPage === "") {
+            const override = { ...formValuesDefaults, username: data.username } as FormValues;
+            return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(override));
+        }
         return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(data));
     }
 
