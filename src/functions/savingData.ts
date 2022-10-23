@@ -1,7 +1,7 @@
 import { FormValues } from './../popup/popup';
 
 export const chromeLocalStorageItem = "savings";
-
+/* 
 export const formValuesDefaults: FormValues = {
     clockIn: "Kommt",
     clockOut: "Geht",
@@ -9,27 +9,28 @@ export const formValuesDefaults: FormValues = {
     htmlPassword: "PINCODE",
     htmlUsername: "AUSWEISNR",
     linkToPage: "http://s-at00-163.meusburger-norm.com/s-at00-162_cwpdb1_cronet/!MAServ.MAServ_Main",
-    password: "",
     username: ""
-}
+} */
 
-/* export const formValuesDefaults: FormValues = {
+export const formValuesDefaults: FormValues = {
     clockIn: "The shore",
     clockOut: "Walking",
     htmlButton: "submit",
     htmlPassword: "pass",
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",
-    password: "",
     username: "",
-} */
+}
 
 export const savings = () => {
 
     const toLocalStorage = (data: FormValues) => {
         if (!data.linkToPage || data.linkToPage === "") {
-            const override = { ...formValuesDefaults, username: data.username } as FormValues;
-            return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(override));
+            const dataFromLocalStorrage = getDataFromLocalStorage();
+            if (dataFromLocalStorrage === undefined) {
+                return localStorage.setItem(chromeLocalStorageItem, JSON.stringify({ ...formValuesDefaults, username: data.username }));
+            }
+            return localStorage.setItem(chromeLocalStorageItem, JSON.stringify({ ...dataFromLocalStorrage, username: data.username }));
         }
         return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(data));
     }

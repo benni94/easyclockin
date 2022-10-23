@@ -9,14 +9,14 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { formValuesDefaults, savings } from "../functions/savingData";
 
 export type FormValues = {
-  linkToPage: string;
-  username: string;
-  password: string;
   clockIn: string;
   clockOut: string;
-  htmlUsername: string;
-  htmlPassword: string;
   htmlButton: string;
+  htmlPassword: string;
+  htmlUsername: string;
+  linkToPage: string;
+  password?: string;
+  username: string;
 };
 
 const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
@@ -36,7 +36,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
 
 
   const clockInClockOut = useCallback((clockIn: boolean) => {
-    startLogin(savings().getDataFromLocalStorage(), clockIn, getValues().password);
+    startLogin(savings().getDataFromLocalStorage(), clockIn, getValues().password || "");
   }, [getValues]);
 
 
@@ -69,7 +69,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         {...(register("linkToPage"))}
                         width={420}
                         defaultValue={savings().getDataFromLocalStorage().linkToPage}
-                        label="Link to page:"
+                        label="Link to clocking page:"
                         variant="standard"
                         id="linkToPage"
                       />
@@ -78,7 +78,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         width={170}
                         margin="normal"
                         defaultValue={savings().getDataFromLocalStorage().clockIn}
-                        label="Name of clock in:"
+                        label="Name of clock in elementt:"
                         variant="standard"
                         id="linkToCome"
                       />
@@ -87,7 +87,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         width={170}
                         margin="dense"
                         defaultValue={savings().getDataFromLocalStorage().clockOut}
-                        label="Name of clock out:"
+                        label="Name of clock out element:"
                         variant="standard"
                         id="linkToGo"
                       />
@@ -133,18 +133,9 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         label="Username:"
                         variant="standard"
                         id="username"
+                        width={118}
                       />
                     </div>
-                    {/*   <div className="inputStyle">
-                      <Input
-                        {...register("password", { required: true })}
-                        defaultValue={savings().getDataFromLocalStorage().password}
-                        label="Password:"
-                        type="password"
-                        variant="standard"
-                        id="password"
-                      />
-                    </div> */}
                   </div>
 
                 </div>
@@ -164,7 +155,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                 </div>
                 <Divider
                   style={{ marginLeft: "30px", marginRight: "30px" }}
-                  sx={{ height: 45, m: 0.5 }}
+                  sx={{ height: 20, m: 0.5 }}
                   orientation="horizontal" />
               </form>
             </div >
@@ -189,12 +180,14 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                 onClick={() => clockInClockOut(true)}
                 title="Clock in"
                 variant="outlined"
+                disabled={!isDirty}
               />
               <DefaultButton
                 color="secondary"
                 onClick={() => clockInClockOut(false)}
                 title="Clock out"
                 variant="outlined"
+                disabled={!isDirty}
               />
             </div>
           </>
