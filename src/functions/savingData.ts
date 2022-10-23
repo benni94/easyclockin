@@ -1,7 +1,7 @@
 import { FormValues } from './../popup/popup';
 
 export const chromeLocalStorageItem = "savings";
-/* 
+
 export const formValuesDefaults: FormValues = {
     clockIn: "Kommt",
     clockOut: "Geht",
@@ -10,8 +10,9 @@ export const formValuesDefaults: FormValues = {
     htmlUsername: "AUSWEISNR",
     linkToPage: "http://s-at00-163.meusburger-norm.com/s-at00-162_cwpdb1_cronet/!MAServ.MAServ_Main",
     username: ""
-} */
+}
 
+/* testing
 export const formValuesDefaults: FormValues = {
     clockIn: "The shore",
     clockOut: "Walking",
@@ -20,7 +21,7 @@ export const formValuesDefaults: FormValues = {
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",
     username: "",
-}
+} */
 
 export const savings = () => {
 
