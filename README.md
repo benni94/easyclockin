@@ -1,8 +1,8 @@
 ## Download 
 
-<a href="https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/benni94/easylogin/tree/master/build" download>Click to here to download</a>
+<a href="https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/benni94/easyclockin/tree/master/build" download>Click to here to download</a>
 
-## Add the chrome extension `easyLogin`
+## Add the chrome extension `easy clock in`
 
 https://developer.chrome.com/docs/extensions/mv2/getstarted/#:~:text=Open%20the%20Extension%20Management%20page%20by%20navigating%20to
 
