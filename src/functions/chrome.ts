@@ -57,7 +57,7 @@ export function startClocking(data: FormValues, clockIn: boolean, password: stri
                 const items = document.body.getElementsByTagName("a");
 
                 for (let i = 0; i < items.length; ++i) {
-                  if (items[i].textContent === (clockIn ? data.clockIn : data.clockOut)) {
+                  if (items[i].textContent?.includes(clockIn ? data.clockIn : data.clockOut)) {
                     items[i].click();
                   }
                 }

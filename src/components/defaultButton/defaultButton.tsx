@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import React from "react";
 
-type Color = "error" | "success" | "secondary";
+type Color = "inherit" | "error" | "success" | "secondary" | "primary" | "info" | "warning";
 type Variant = "contained" | "outlined" | "text";
 type Size = "small" | "medium" | "large";
 
@@ -12,11 +12,12 @@ export type IDefaultButtonProps = {
   title: string;
   type?: "submit" | "reset" | "button" | undefined;
   size?: Size;
+  style?: React.CSSProperties;
   variant?: Variant;
 };
 
 const DefaultButton: React.FC<IDefaultButtonProps> = (props) => {
-  const { color, disabled, onClick, title, type, size, variant } = props;
+  const { color, disabled, onClick, title, type, size, style, variant } = props;
 
   return (
     <Button
@@ -24,6 +25,7 @@ const DefaultButton: React.FC<IDefaultButtonProps> = (props) => {
       disabled={disabled}
       onClick={onClick}
       size={size}
+      style={style}
       type={type}
       variant={variant}
     >

@@ -35,26 +35,21 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
     navigateToUrl(savings().getDataFromLocalStorage().linkToPage);
   }, []);
 
-  const clockInClockOut = useCallback((clockIn: boolean) => {
-    startClocking(savings().getDataFromLocalStorage(), clockIn, getValues().password || "");
-    const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
-    clockerClicked().toLocalStorage(clicked);
-    setClockedIn(clicked);
-  }, [clockedIn, getValues]);
-
   const clear = useCallback(() => {
     reset(formValuesDefaults);
     savings().removeFromLocalStorage();
   }, [reset]);
 
-
-  const switcher = useCallback(() => {
+  const switcher = useCallback((shouldChange: boolean) => {
     const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
     clockerClicked().toLocalStorage(clicked);
-    setClockedIn(clicked);
+    if (shouldChange) setClockedIn(clicked);
   }, [clockedIn]);
 
-
+  const clockInClockOut = useCallback((clockIn: boolean) => {
+    startClocking(savings().getDataFromLocalStorage(), clockIn, getValues().password || "");
+    switcher(false);
+  }, [getValues, switcher]);
 
   return (
     <div>
@@ -186,25 +181,26 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                 variant="standard"
                 id="password"
               />
-              <div style={{ flexDirection: "row", gap: "10px" }}>
+              <div style={{ display: "flex", flexDirection: "row", gap: "13px" }}>
                 {clockedIn === "clockIn" ? <DefaultButton
                   color="success"
                   onClick={() => clockInClockOut(true)}
+                  style={{ minWidth: "130px", maxWidth: "130px" }}
                   title="Clock in"
                   variant="outlined"
-                  disabled={!isDirty}
                 /> :
                   <DefaultButton
                     color="secondary"
                     onClick={() => clockInClockOut(false)}
+                    style={{ minWidth: "130px", maxWidth: "130px" }}
                     title="Clock out"
                     variant="outlined"
-                    disabled={!isDirty}
                   />}
                 <DefaultButton
-                  color="secondary"
-                  onClick={switcher}
-                  variant="outlined"
+                  color="info"
+                  onClick={() => switcher(true)}
+                  style={{ minWidth: "10px", maxWidth: "10px" }}
+                  variant="text"
                   title="↔️"
                 />
               </div>

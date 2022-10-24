@@ -5,7 +5,7 @@ export const clockerClickedState = "clocker";
 
 export type Clocker = "clockIn" | "clockOut";
 
-export const formValuesDefaults: FormValues = {
+/* export const formValuesDefaults: FormValues = {
     clockIn: "Kommt",
     clockOut: "Geht",
     htmlButton: "submit",
@@ -13,17 +13,17 @@ export const formValuesDefaults: FormValues = {
     htmlUsername: "AUSWEISNR",
     linkToPage: "http://s-at00-163.meusburger-norm.com/s-at00-162_cwpdb1_cronet/!MAServ.MAServ_Main",
     username: ""
-}
+} */
 
-/* export const formValuesDefaults: FormValues = {
-    clockIn: "The shore",
+export const formValuesDefaults: FormValues = {
+    clockIn: "Browse categories",
     clockOut: "Walking",
     htmlButton: "submit",
     htmlPassword: "pass",
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",
     username: "",
-} */
+}
 
 export const savings = () => {
 
