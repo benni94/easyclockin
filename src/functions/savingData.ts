@@ -1,6 +1,9 @@
 import { FormValues } from './../popup/popup';
 
 export const chromeLocalStorageItem = "savings";
+export const clockerClickedState = "clocker";
+
+export type Clocker = "clockIn" | "clockOut";
 
 export const formValuesDefaults: FormValues = {
     clockIn: "Kommt",
@@ -12,8 +15,7 @@ export const formValuesDefaults: FormValues = {
     username: ""
 }
 
-/* testing
-export const formValuesDefaults: FormValues = {
+/* export const formValuesDefaults: FormValues = {
     clockIn: "The shore",
     clockOut: "Walking",
     htmlButton: "submit",
@@ -49,5 +51,18 @@ export const savings = () => {
     return { getDataFromLocalStorage, removeFromLocalStorage, toLocalStorage };
 };
 
+export const clockerClicked = () => {
 
+    const toLocalStorage = (data: Clocker) => {
+        return localStorage.setItem(clockerClickedState, JSON.stringify(data));
+    }
+
+    const getDataFromLocalStorage: () => Clocker = () => {
+        const items = localStorage.getItem(clockerClickedState);
+        if (!items) return "clockIn";
+        return JSON.parse(items);
+    }
+
+    return { toLocalStorage, getDataFromLocalStorage };
+}
 

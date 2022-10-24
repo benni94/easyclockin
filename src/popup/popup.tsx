@@ -3,10 +3,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
 import { Input } from "../components/Input/input";
-import { navigateToUrl, startLogin, getCurrentUrl } from "../functions/chrome";
+import { navigateToUrl, startClocking, getCurrentUrl } from "../functions/chrome";
 import "./popup.css";
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { formValuesDefaults, savings } from "../functions/savingData";
+import { clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
 
 export type FormValues = {
   clockIn: string;
@@ -23,6 +23,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
   const onSubmit: SubmitHandler<FormValues> = result => savings().toLocalStorage(result);
   const [onLoginUrl, setOnLoginUrl] = useState(false);
+  const [clockedIn, setClockedIn] = useState(clockerClicked().getDataFromLocalStorage());
 
   useEffect(() => {
     getCurrentUrl().then((currentUrl) => {
@@ -34,16 +35,26 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
     navigateToUrl(savings().getDataFromLocalStorage().linkToPage);
   }, []);
 
-
   const clockInClockOut = useCallback((clockIn: boolean) => {
-    startLogin(savings().getDataFromLocalStorage(), clockIn, getValues().password || "");
-  }, [getValues]);
-
+    startClocking(savings().getDataFromLocalStorage(), clockIn, getValues().password || "");
+    const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
+    clockerClicked().toLocalStorage(clicked);
+    setClockedIn(clicked);
+  }, [clockedIn, getValues]);
 
   const clear = useCallback(() => {
     reset(formValuesDefaults);
     savings().removeFromLocalStorage();
   }, [reset]);
+
+
+  const switcher = useCallback(() => {
+    const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
+    clockerClicked().toLocalStorage(clicked);
+    setClockedIn(clicked);
+  }, [clockedIn]);
+
+
 
   return (
     <div>
@@ -53,15 +64,15 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
           appWidth={appWidth}
           labelCollapsed="Settings: ➕"
           labelOpen="Settings: ➖"
-          collapsedWidth={200}
-          openWidth={200}
+          collapsedWidth={220}
+          openWidth={220}
           content={
             <div className="collapseContent">
 
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Collapse
                   appWidth={appWidth}
-                  collapsedWidth={200}
+                  collapsedWidth={220}
                   openWidth={600}
                   content={
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -165,7 +176,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
       <div className="buttonExecuteWrapper">
         {onLoginUrl ?
           <>
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center" }}>
               <Input
                 autoFocus
                 {...register("password")}
@@ -175,20 +186,28 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                 variant="standard"
                 id="password"
               />
-              <DefaultButton
-                color="success"
-                onClick={() => clockInClockOut(true)}
-                title="Clock in"
-                variant="outlined"
-                disabled={!isDirty}
-              />
-              <DefaultButton
-                color="secondary"
-                onClick={() => clockInClockOut(false)}
-                title="Clock out"
-                variant="outlined"
-                disabled={!isDirty}
-              />
+              <div style={{ flexDirection: "row", gap: "10px" }}>
+                {clockedIn === "clockIn" ? <DefaultButton
+                  color="success"
+                  onClick={() => clockInClockOut(true)}
+                  title="Clock in"
+                  variant="outlined"
+                  disabled={!isDirty}
+                /> :
+                  <DefaultButton
+                    color="secondary"
+                    onClick={() => clockInClockOut(false)}
+                    title="Clock out"
+                    variant="outlined"
+                    disabled={!isDirty}
+                  />}
+                <DefaultButton
+                  color="secondary"
+                  onClick={switcher}
+                  variant="outlined"
+                  title="↔️"
+                />
+              </div>
             </div>
           </>
           :

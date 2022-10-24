@@ -28,7 +28,7 @@ export async function getCurrentUrl() {
   return tab.url
 }
 
-export function startLogin(data: FormValues, clockIn: boolean, password: string) {
+export function startClocking(data: FormValues, clockIn: boolean, password: string) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
