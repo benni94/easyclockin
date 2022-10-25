@@ -54,11 +54,18 @@ export function startClocking(data: FormValues, clockIn: boolean, password: stri
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id || 0 },
               func: (data: FormValues, clockIn: boolean) => {
-                const items = document.body.getElementsByTagName("a");
 
-                for (let i = 0; i < items.length; ++i) {
-                  if (items[i].textContent?.includes(clockIn ? data.clockIn : data.clockOut)) {
-                    items[i].click();
+                /* var d = document.getElementById('menuArea').getElementsByTagName('a')
+                    d.className = d.className + " otherclass"; */
+
+                //const items = document.body.getElementsByTagName("a");
+                const tabel = document.body.querySelector('tr');
+                if (tabel) {
+                  const items = tabel.getElementsByTagName("a");
+                  for (let i = 0; i < items.length; ++i) {
+                    if (items[i].textContent?.includes(clockIn ? data.clockIn : data.clockOut)) {
+                      items[i].click();
+                    }
                   }
                 }
               },
