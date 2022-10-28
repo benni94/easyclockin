@@ -19,6 +19,8 @@ export type FormValues = {
   username: string;
 };
 
+export type ClockInTypes = "clockIn" | "clockOut" | "login";
+
 const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
   const onSubmit: SubmitHandler<FormValues> = result => savings().toLocalStorage(result);
@@ -46,8 +48,8 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
     if (shouldChange) setClockedIn(clicked);
   }, [clockedIn]);
 
-  const clockInClockOut = useCallback((clockIn: boolean) => {
-    startClocking(savings().getDataFromLocalStorage(), clockIn, getValues().password || "");
+  const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
+    startClocking(clockIn, savings().getDataFromLocalStorage(), getValues().password || "");
     switcher(false);
   }, [getValues, switcher]);
 
@@ -80,49 +82,49 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         id="linkToPage"
                       />
                       <Input
-                        {...(register("clockIn"))}
-                        width={170}
-                        margin="normal"
-                        defaultValue={savings().getDataFromLocalStorage().clockIn}
-                        label="Name of clock in elementt:"
-                        variant="standard"
-                        id="linkToCome"
-                      />
-                      <Input
-                        {...(register("clockOut"))}
-                        width={170}
-                        margin="dense"
-                        defaultValue={savings().getDataFromLocalStorage().clockOut}
-                        label="Name of clock out element:"
-                        variant="standard"
-                        id="linkToGo"
-                      />
-                      <Input
                         {...register("htmlUsername")}
-                        width={170}
-                        margin="dense"
+                        width={150}
+                        margin="normal"
                         defaultValue={savings().getDataFromLocalStorage().htmlUsername}
-                        label="Html Element Username:"
+                        label="Username Html Element:"
                         variant="standard"
                         id="htmlUsername"
                       />
                       <Input
                         {...register("htmlPassword")}
-                        width={170}
+                        width={150}
                         margin="dense"
                         defaultValue={savings().getDataFromLocalStorage().htmlPassword}
-                        label="Html Element Password:"
+                        label="Password Html Element:"
                         variant="standard"
                         id="htmlPassword"
                       />
                       <Input
                         {...register("htmlButton")}
-                        width={170}
+                        width={150}
                         margin="dense"
                         defaultValue={savings().getDataFromLocalStorage().htmlButton}
-                        label="Html Element Button:"
+                        label="Button Html Element:"
                         variant="standard"
                         id="htmlButton"
+                      />
+                      <Input
+                        {...(register("clockIn"))}
+                        width={150}
+                        margin="normal"
+                        defaultValue={savings().getDataFromLocalStorage().clockIn}
+                        label="Clock in Html Element:"
+                        variant="standard"
+                        id="linkToCome"
+                      />
+                      <Input
+                        {...(register("clockOut"))}
+                        width={150}
+                        margin="dense"
+                        defaultValue={savings().getDataFromLocalStorage().clockOut}
+                        label="Clock out Html Element:"
+                        variant="standard"
+                        id="linkToGo"
                       />
                     </div>
                   }
@@ -139,7 +141,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                         label="Username:"
                         variant="standard"
                         id="username"
-                        width={118}
+                        width={150}
                       />
                     </div>
                   </div>
@@ -182,20 +184,23 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                 id="password"
               />
               <div style={{ display: "flex", flexDirection: "row", gap: "13px" }}>
-                {clockedIn === "clockIn" ? <DefaultButton
-                  color="success"
-                  onClick={() => clockInClockOut(true)}
-                  style={{ minWidth: "130px", maxWidth: "130px" }}
-                  title="Clock in"
-                  variant="outlined"
-                /> :
-                  <DefaultButton
-                    color="secondary"
-                    onClick={() => clockInClockOut(false)}
-                    style={{ minWidth: "130px", maxWidth: "130px" }}
-                    title="Clock out"
-                    variant="outlined"
-                  />}
+                {
+                  clockedIn === "clockIn" ?
+                    <DefaultButton
+                      color="success"
+                      onClick={() => clockInClockOut("clockIn")}
+                      style={{ minWidth: "130px", maxWidth: "130px" }}
+                      title="Clock in"
+                      variant="outlined"
+                    /> :
+                    <DefaultButton
+                      color="secondary"
+                      onClick={() => clockInClockOut("clockOut")}
+                      style={{ minWidth: "130px", maxWidth: "130px" }}
+                      title="Clock out"
+                      variant="outlined"
+                    />
+                }
                 <DefaultButton
                   color="info"
                   onClick={() => switcher(true)}
@@ -204,6 +209,12 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                   title="↔️"
                 />
               </div>
+              <DefaultButton
+                onClick={() => clockInClockOut("login")}
+                style={{ minWidth: "130px", maxWidth: "130px", marginRight: "29px" }}
+                title="Only login"
+                variant="outlined"
+              />
             </div>
           </>
           :

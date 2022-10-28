@@ -1,3 +1,4 @@
+import { ClockInTypes } from './../popup/popup';
 import { FormValues } from "../popup/popup";
 
 export function sendMessageToConsole(fun: (arg: chrome.tabs.Tab[]) => void) {
@@ -28,20 +29,33 @@ export async function getCurrentUrl() {
   return tab.url
 }
 
-export function startClocking(data: FormValues, clockIn: boolean, password: string) {
+export function startClocking(clockIn: ClockInTypes, data: FormValues, password: string) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
       func: (data: FormValues, password: string) => {
         if (window.document.URL === data.linkToPage) {
 
-          const usernameHtml = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
-          usernameHtml.value = data.username;
+          const findInDom = (htmlElement: string, textPlacement: 'href' | 'textContent' | 'name' | 'value', textContent: string): HTMLInputElement => {
+            const doc = document.querySelectorAll(htmlElement);
+            const matches = Array.prototype.slice.call(doc);
+            const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
+              return element[textPlacement] === textContent;
+            }
+            return matches.filter(filterElements)[0];
+          }
 
-          const passwordHtml = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
-          passwordHtml.value = password;
+          findInDom('input', 'name', data.htmlUsername).value = data.username;
+          findInDom('input', 'name', data.htmlPassword).value = password;
+          findInDom('input', 'value', data.htmlButton).click();
 
-          document.querySelectorAll(`input[type=${data.htmlButton}]`).forEach(el => { const button = el as HTMLElement; button.click(); });
+          /*  const usernameHtml = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
+           usernameHtml.value = data.username;
+ 
+           const passwordHtml = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
+           passwordHtml.value = password;
+ 
+           document.querySelectorAll(`input[type=${data.htmlButton}]`).forEach(el => { const button = el as HTMLElement; button.click(); }); */
           return true;
         }
         return false;
@@ -53,21 +67,18 @@ export function startClocking(data: FormValues, clockIn: boolean, password: stri
           if (changeInfo.status === 'complete') {
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id || 0 },
-              func: (data: FormValues, clockIn: boolean) => {
+              func: (data: FormValues, clockIn: ClockInTypes) => {
 
-                /* var d = document.getElementById('menuArea').getElementsByTagName('a')
-                    d.className = d.className + " otherclass"; */
-
-                //const items = document.body.getElementsByTagName("a");
-                const tabel = document.body.querySelector('tr');
-                if (tabel) {
-                  const items = tabel.getElementsByTagName("a");
-                  for (let i = 0; i < items.length; ++i) {
-                    if (items[i].textContent?.includes(clockIn ? data.clockIn : data.clockOut)) {
-                      items[i].click();
-                    }
+                const findInDom = (htmlElement: string, textPlacement: 'href' | 'textContent' | 'name' | 'value', textContent: string): HTMLInputElement => {
+                  const doc = document.querySelectorAll(htmlElement);
+                  const matches = Array.prototype.slice.call(doc);
+                  const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
+                    return element[textPlacement] === textContent;
                   }
+                  return matches.filter(filterElements)[0];
                 }
+
+                if (clockIn !== "login") findInDom('a', 'textContent', clockIn === "clockIn" ? data.clockIn : data.clockOut).click();
               },
               args: [data, clockIn],
             })

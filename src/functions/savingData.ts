@@ -18,7 +18,7 @@ export const formValuesDefaults: FormValues = {
 /* export const formValuesDefaults: FormValues = {
     clockIn: "Browse categories",
     clockOut: "Walking",
-    htmlButton: "submit",
+    htmlButton: "login",
     htmlPassword: "pass",
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",
