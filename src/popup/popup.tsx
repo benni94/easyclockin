@@ -7,19 +7,7 @@ import { navigateToUrl, startClocking, getCurrentUrl } from "../functions/chrome
 import "./popup.css";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
-
-export type FormValues = {
-  clockIn: string;
-  clockOut: string;
-  htmlButton: string;
-  htmlPassword: string;
-  htmlUsername: string;
-  linkToPage: string;
-  password?: string;
-  username: string;
-};
-
-export type ClockInTypes = "clockIn" | "clockOut" | "login";
+import { ClockInTypes, FormValues } from "./popup.types";
 
 const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
@@ -49,7 +37,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
   }, [clockedIn]);
 
   const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
-    startClocking(clockIn, savings().getDataFromLocalStorage(), getValues().password || "");
+    startClocking({ clockIn: clockIn, data: savings().getDataFromLocalStorage(), password: getValues().password || "" });
     switcher(false);
   }, [getValues, switcher]);
 

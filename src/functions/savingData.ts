@@ -1,4 +1,4 @@
-import { FormValues } from './../popup/popup';
+import { FormValues } from "../popup/popup.types";
 
 export const chromeLocalStorageItem = "savings";
 export const clockerClickedState = "clocker";
@@ -8,7 +8,7 @@ export type Clocker = "clockIn" | "clockOut";
 export const formValuesDefaults: FormValues = {
     clockIn: "Kommt",
     clockOut: "Geht",
-    htmlButton: "submit",
+    htmlButton: "Anmeldung",
     htmlPassword: "PINCODE",
     htmlUsername: "AUSWEISNR",
     linkToPage: "http://s-at00-163.meusburger-norm.com/s-at00-162_cwpdb1_cronet/!MAServ.MAServ_Main",

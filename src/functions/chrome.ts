@@ -1,5 +1,5 @@
-import { ClockInTypes } from './../popup/popup';
-import { FormValues } from "../popup/popup";
+import { IStartColockinArgs } from "../popup/popup.types";
+import { FinderArgs } from "./finders";
 
 export function sendMessageToConsole(fun: (arg: chrome.tabs.Tab[]) => void) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -29,58 +29,74 @@ export async function getCurrentUrl() {
   return tab.url
 }
 
-export function startClocking(clockIn: ClockInTypes, data: FormValues, password: string) {
+export function startClocking(args: IStartColockinArgs) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
-      func: (data: FormValues, password: string) => {
-        if (window.document.URL === data.linkToPage) {
+      func: (args: IStartColockinArgs) => {
+        if (window.document.URL === args.data.linkToPage) {
 
-          const findInDom = (htmlElement: string, textPlacement: 'href' | 'textContent' | 'name' | 'value', textContent: string): HTMLInputElement => {
-            const doc = document.querySelectorAll(htmlElement);
-            const matches = Array.prototype.slice.call(doc);
-            const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
-              return element[textPlacement] === textContent;
-            }
-            return matches.filter(filterElements)[0];
+          const findInDom = (args: FinderArgs[]) => {
+            args.forEach(arg => {
+              const doc = document.querySelectorAll(arg.htmlElement);
+              const matches = Array.prototype.slice.call(doc);
+              const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
+                return element[arg.textPlacement] === arg.textContent;
+              }
+              if (arg.func === "value") {
+                matches.filter(filterElements)[0][arg.func] = arg.value;
+              }
+              if (arg.func === "click") {
+                matches.filter(filterElements)[0].click();
+              }
+            })
           }
 
-          findInDom('input', 'name', data.htmlUsername).value = data.username;
-          findInDom('input', 'name', data.htmlPassword).value = password;
-          findInDom('input', 'value', data.htmlButton).click();
+          findInDom(
+            [
+              { func: "value", htmlElement: "input", textContent: args.data.htmlUsername, textPlacement: "name", value: args.data.username },
+              { func: "value", htmlElement: "input", textContent: args.data.htmlPassword, textPlacement: "name", value: args.password },
+              { func: "click", htmlElement: "input", textContent: args.data.htmlButton, textPlacement: "value", value: args.data.htmlButton }
+            ]
+          );
 
-          /*  const usernameHtml = document.getElementsByName(data.htmlUsername)[0] as HTMLInputElement;
-           usernameHtml.value = data.username;
- 
-           const passwordHtml = document.getElementsByName(data.htmlPassword)[0] as HTMLInputElement;
-           passwordHtml.value = password;
- 
-           document.querySelectorAll(`input[type=${data.htmlButton}]`).forEach(el => { const button = el as HTMLElement; button.click(); }); */
           return true;
         }
         return false;
       },
-      args: [data, password],
+      args: [args],
     })
       .then(results => {
         chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab,) => {
           if (changeInfo.status === 'complete') {
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id || 0 },
-              func: (data: FormValues, clockIn: ClockInTypes) => {
+              func: (args: IStartColockinArgs) => {
 
-                const findInDom = (htmlElement: string, textPlacement: 'href' | 'textContent' | 'name' | 'value', textContent: string): HTMLInputElement => {
-                  const doc = document.querySelectorAll(htmlElement);
-                  const matches = Array.prototype.slice.call(doc);
-                  const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
-                    return element[textPlacement] === textContent;
-                  }
-                  return matches.filter(filterElements)[0];
+                const findInDom = (args: FinderArgs[]) => {
+                  args.forEach(arg => {
+                    const doc = document.querySelectorAll(arg.htmlElement);
+                    const matches = Array.prototype.slice.call(doc);
+                    const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
+                      return element[arg.textPlacement] === arg.textContent;
+                    }
+                    if (arg.func === "value") {
+                      matches.filter(filterElements)[0][arg.func] = arg.value;
+                    }
+                    if (arg.func === "click") {
+                      matches.filter(filterElements)[0].click();
+                    }
+                  })
                 }
 
-                if (clockIn !== "login") findInDom('a', 'textContent', clockIn === "clockIn" ? data.clockIn : data.clockOut).click();
+                findInDom(
+                  [
+                    { func: "click", htmlElement: "a", textContent: args.clockIn === "clockIn" ? args.data.clockIn : args.data.clockOut, textPlacement: "textContent" },
+                  ]
+                );
+
               },
-              args: [data, clockIn],
+              args: [args],
             })
             if (results[0].result) {
               window.close();
