@@ -1,9 +1,8 @@
-
 export interface FinderArgs {
     /**
      * The type of the html element like a or div.
      */
-    htmlElement: string;
+    htmlElement: keyof HTMLElementTagNameMap;
     /**
      * The function which should be executed.
      */
@@ -13,27 +12,24 @@ export interface FinderArgs {
      */
     textContent: string;
     /**
-     * Differs between the differen different places of the inline text. textContent is the inline varian.
+     * Differs between the differen places of the inline text. textContent is the inline variant.
      */
-    textPlacement: 'href' | 'textContent' | 'name' | 'value';
+    textPlacement: keyof HTMLInputElement;
     /**
-     * The value which can be set in the specific element.
+     * The value is used to replace the inline textContent with the given value.
      */
     value?: string;
 }
-
-export type Finder = (args: FinderArgs[]) => void;
-
 
 /**
  * This is a function to find a html element with the specific type and specific (no difference or shorts) 
  * inline text.
  */
-export const findInDom = (args: FinderArgs[]) => {
+export const findAndExecuteInDom = (args: FinderArgs[]) => {
     args.forEach(arg => {
         const doc = document.querySelectorAll(arg.htmlElement);
         const matches = Array.prototype.slice.call(doc);
-        const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
+        const filterElements = (element: HTMLInputElement) => {
             return element[arg.textPlacement] === arg.textContent;
         }
         if (arg.func === "value") {
@@ -43,5 +39,8 @@ export const findInDom = (args: FinderArgs[]) => {
             matches.filter(filterElements)[0].click();
         }
     })
+    // necessary for the next step in chrome scripts if needed
+    return true;
 }
+
 

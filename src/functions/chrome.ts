@@ -1,5 +1,4 @@
-import { IStartColockinArgs } from "../popup/popup.types";
-import { FinderArgs } from "./finders";
+import { FinderArgs, findAndExecuteInDom } from "./finders";
 
 export function sendMessageToConsole(fun: (arg: chrome.tabs.Tab[]) => void) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -12,15 +11,7 @@ export function sendMessageToConsole(fun: (arg: chrome.tabs.Tab[]) => void) {
 }
 
 export function navigateToUrl(url: string) {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id || 0 },
-      args: [url],
-      func: (url: string) => {
-        window.open(url, '_blank');
-      },
-    });
-  });
+  chrome.tabs.create({ url });
 }
 
 export async function getCurrentUrl() {
@@ -29,80 +20,27 @@ export async function getCurrentUrl() {
   return tab.url
 }
 
-export function startClocking(args: IStartColockinArgs) {
+export function executeClockin(args1: FinderArgs[], args2?: FinderArgs[]) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
-      func: (args: IStartColockinArgs) => {
-        if (window.document.URL === args.data.linkToPage) {
-
-          const findInDom = (args: FinderArgs[]) => {
-            args.forEach(arg => {
-              const doc = document.querySelectorAll(arg.htmlElement);
-              const matches = Array.prototype.slice.call(doc);
-              const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
-                return element[arg.textPlacement] === arg.textContent;
-              }
-              if (arg.func === "value") {
-                matches.filter(filterElements)[0][arg.func] = arg.value;
-              }
-              if (arg.func === "click") {
-                matches.filter(filterElements)[0].click();
-              }
-            })
-          }
-
-          findInDom(
-            [
-              { func: "value", htmlElement: "input", textContent: args.data.htmlUsername, textPlacement: "name", value: args.data.username },
-              { func: "value", htmlElement: "input", textContent: args.data.htmlPassword, textPlacement: "name", value: args.password },
-              { func: "click", htmlElement: "input", textContent: args.data.htmlButton, textPlacement: "value", value: args.data.htmlButton }
-            ]
-          );
-
-          return true;
-        }
-        return false;
-      },
-      args: [args],
+      func: findAndExecuteInDom,
+      args: [args1],
     })
       .then(results => {
         chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab,) => {
-          if (changeInfo.status === 'complete') {
+          // if the findInDom from args1 returns true, the second script could be executed
+          if (changeInfo.status === 'complete' && args2) {
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id || 0 },
-              func: (args: IStartColockinArgs) => {
-
-                const findInDom = (args: FinderArgs[]) => {
-                  args.forEach(arg => {
-                    const doc = document.querySelectorAll(arg.htmlElement);
-                    const matches = Array.prototype.slice.call(doc);
-                    const filterElements = (element: HTMLInputElement & HTMLHyperlinkElementUtils) => {
-                      return element[arg.textPlacement] === arg.textContent;
-                    }
-                    if (arg.func === "value") {
-                      matches.filter(filterElements)[0][arg.func] = arg.value;
-                    }
-                    if (arg.func === "click") {
-                      matches.filter(filterElements)[0].click();
-                    }
-                  })
-                }
-
-                findInDom(
-                  [
-                    { func: "click", htmlElement: "a", textContent: args.clockIn === "clockIn" ? args.data.clockIn : args.data.clockOut, textPlacement: "textContent" },
-                  ]
-                );
-
-              },
-              args: [args],
+              func: findAndExecuteInDom,
+              args: [args2],
             })
             if (results[0].result) {
               window.close();
             }
           }
         })
-      });
+      })
   });
 }

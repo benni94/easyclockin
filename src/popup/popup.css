@@ -6,11 +6,24 @@ button {
     border: none;
 }
 
+.bottomElementsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.bottomActionButtonWrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 13px;
+}
+
 .buttonExecuteWrapper {
     display: flex;
     justify-content: space-evenly;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 5px;
+    margin-bottom: 25px;
 }
 
 .setResetWrapper {
@@ -18,4 +31,10 @@ button {
     justify-content: center;
     padding-top: 30px;
     gap: 10px;
+}
+
+.usernameWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }

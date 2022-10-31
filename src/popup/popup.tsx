@@ -3,13 +3,18 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
 import { Input } from "../components/Input/input";
-import { navigateToUrl, startClocking, getCurrentUrl } from "../functions/chrome";
+import { navigateToUrl, executeClockin, getCurrentUrl } from "../functions/chrome";
 import "./popup.css";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
 import { ClockInTypes, FormValues } from "./popup.types";
+import { InputAdvanced } from "./popup.render";
+import SettingsIcon from '@mui/icons-material/Settings';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 
-const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
+export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
   const onSubmit: SubmitHandler<FormValues> = result => savings().toLocalStorage(result);
   const [onLoginUrl, setOnLoginUrl] = useState(false);
@@ -37,7 +42,18 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
   }, [clockedIn]);
 
   const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
-    startClocking({ clockIn: clockIn, data: savings().getDataFromLocalStorage(), password: getValues().password || "" });
+    const args = savings().getDataFromLocalStorage();
+    console.log('args', args);
+    executeClockin(
+      [
+        { func: "value", htmlElement: "input", textContent: args.htmlUsername, textPlacement: "name", value: args.username },
+        { func: "value", htmlElement: "input", textContent: args.htmlPassword, textPlacement: "name", value: getValues().password || "" },
+        { func: "click", htmlElement: "input", textContent: args.htmlButton, textPlacement: "value" }
+      ],
+      clockIn !== "login" ? [
+        { func: "click", htmlElement: "a", textContent: clockIn === "clockIn" ? args.clockIn : args.clockOut, textPlacement: "textContent" },
+      ] : undefined,
+    )
     switcher(false);
   }, [getValues, switcher]);
 
@@ -47,8 +63,10 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
       <div>
         <Collapse
           appWidth={appWidth}
-          labelCollapsed="Settings: ➕"
-          labelOpen="Settings: ➖"
+          collapsedIcon={<AddIcon />}
+          openIcon={<RemoveIcon />}
+          labelCollapsed="Settings:"
+          labelOpen="Settings:"
           collapsedWidth={220}
           openWidth={220}
           content={
@@ -58,82 +76,32 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
                 <Collapse
                   appWidth={appWidth}
                   collapsedWidth={220}
+                  collapsedIcon={<SettingsIcon />}
+                  openIcon={<SettingsSuggestIcon />}
                   openWidth={600}
                   content={
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <Input
-                        {...(register("linkToPage"))}
-                        width={420}
-                        defaultValue={savings().getDataFromLocalStorage().linkToPage}
-                        label="Link to clocking page:"
-                        variant="standard"
-                        id="linkToPage"
+                    <>
+                      <InputAdvanced
+                        register={register}
                       />
-                      <Input
-                        {...register("htmlUsername")}
-                        width={150}
-                        margin="normal"
-                        defaultValue={savings().getDataFromLocalStorage().htmlUsername}
-                        label="Username Html Element:"
-                        variant="standard"
-                        id="htmlUsername"
-                      />
-                      <Input
-                        {...register("htmlPassword")}
-                        width={150}
-                        margin="dense"
-                        defaultValue={savings().getDataFromLocalStorage().htmlPassword}
-                        label="Password Html Element:"
-                        variant="standard"
-                        id="htmlPassword"
-                      />
-                      <Input
-                        {...register("htmlButton")}
-                        width={150}
-                        margin="dense"
-                        defaultValue={savings().getDataFromLocalStorage().htmlButton}
-                        label="Button Html Element:"
-                        variant="standard"
-                        id="htmlButton"
-                      />
-                      <Input
-                        {...(register("clockIn"))}
-                        width={150}
-                        margin="normal"
-                        defaultValue={savings().getDataFromLocalStorage().clockIn}
-                        label="Clock in Html Element:"
-                        variant="standard"
-                        id="linkToCome"
-                      />
-                      <Input
-                        {...(register("clockOut"))}
-                        width={150}
-                        margin="dense"
-                        defaultValue={savings().getDataFromLocalStorage().clockOut}
-                        label="Clock out Html Element:"
-                        variant="standard"
-                        id="linkToGo"
-                      />
-                    </div>
+                      <Divider
+                        style={{ marginLeft: "30px", marginRight: "30px" }}
+                        sx={{ height: 20, m: 0.5 }}
+                        orientation="horizontal" />
+                    </>
                   }
-                  labelCollapsed="Advanced ⚙️"
-                  labelOpen="⚙️"
+                  labelCollapsed="Advanced:"
+                  labelOpen="Advanced:"
                 />
-
-                <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", marginTop: "20px" }}>
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    <div className="inputStyle">
-                      <Input
-                        {...register("username", { required: true })}
-                        defaultValue={savings().getDataFromLocalStorage().username}
-                        label="Username:"
-                        variant="standard"
-                        id="username"
-                        width={150}
-                      />
-                    </div>
-                  </div>
-
+                <div className="usernameWrapper">
+                  <Input
+                    {...register("username", { required: true })}
+                    defaultValue={savings().getDataFromLocalStorage().username}
+                    label="Username:"
+                    variant="standard"
+                    id="username"
+                    width={150}
+                  />
                 </div>
                 <div className="setResetWrapper">
                   <DefaultButton
@@ -161,17 +129,17 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
       <div className="buttonExecuteWrapper">
         {onLoginUrl ?
           <>
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "center" }}>
+            <div className="bottomElementsWrapper">
               <Input
                 autoFocus
                 {...register("password")}
-                width={118}
+                width={150}
                 label="Password:"
                 type="password"
                 variant="standard"
                 id="password"
               />
-              <div style={{ display: "flex", flexDirection: "row", gap: "13px" }}>
+              <div className="bottomActionButtonWrapper">
                 {
                   clockedIn === "clockIn" ?
                     <DefaultButton
@@ -208,6 +176,7 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
           :
           <DefaultButton
             onClick={navigate}
+            style={{ marginTop: "15px" }}
             title="Go to url"
             variant="contained"
           />
@@ -217,5 +186,3 @@ const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => 
     </div >
   );
 };
-
-export { Popup };

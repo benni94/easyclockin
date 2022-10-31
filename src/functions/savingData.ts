@@ -17,7 +17,7 @@ export const formValuesDefaults: FormValues = {
 
 /* export const formValuesDefaults: FormValues = {
     clockIn: "Browse categories",
-    clockOut: "Walking",
+    clockOut: "Logout",
     htmlButton: "login",
     htmlPassword: "pass",
     htmlUsername: "uname",
