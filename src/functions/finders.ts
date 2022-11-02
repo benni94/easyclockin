@@ -30,7 +30,7 @@ export const findAndExecuteInDom = (args: FinderArgs[]) => {
         const doc = document.querySelectorAll(arg.htmlElement);
         const matches = Array.prototype.slice.call(doc);
         const filterElements = (element: HTMLInputElement) => {
-            return element[arg.textPlacement] === arg.textContent;
+            return element[arg.textPlacement]?.toString().includes(arg.textContent);
         }
         if (arg.func === "value") {
             matches.filter(filterElements)[0][arg.func] = arg.value;

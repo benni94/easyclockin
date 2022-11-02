@@ -22,3 +22,19 @@ after that, you can build and click in the management extensions `update`
 
 pack and make it usable in the app store
 https://github.com/lxieyang/chrome-extension-boilerplate-react
+
+
+TEST: 
+const findAndExecuteInDom = (args) => {
+    args.forEach(arg => {
+        const doc = document.querySelectorAll(arg.htmlElement);
+        const matches = Array.prototype.slice.call(doc);
+        const filterElements = (element) => {
+            return element[arg.textPlacement]?.toString().includes(arg.textContent);
+        }
+        matches.filter(filterElements)[0].click();
+        
+    })
+}
+
+findAndExecuteInDom([{htmlElement:"a", textPlacement:"textContent", textContent:"categories"}]);
