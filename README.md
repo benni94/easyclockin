@@ -54,3 +54,13 @@ for (const div of document.querySelectorAll('a')) {
 }
 
 console.log(matches); 
+
+//////
+
+const text = 'Kommt';
+
+for (const div of document.querySelectorAll('a')) {
+  if (div.textContent.includes(text)) {
+	div.click()
+  }
+}
