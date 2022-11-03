@@ -38,3 +38,19 @@ const findAndExecuteInDom = (args) => {
 }
 
 findAndExecuteInDom([{htmlElement:"a", textPlacement:"textContent", textContent:"categories"}]);
+
+
+//////
+
+const text = 'Kommt';
+
+const matches = [];
+
+for (const div of document.querySelectorAll('a')) {
+  if (div.textContent.includes(text)) {
+	div.click()
+    matches.push(div);
+  }
+}
+
+console.log(matches); 
