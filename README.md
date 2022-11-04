@@ -68,13 +68,13 @@ for (const div of document.querySelectorAll('a')) {
 
 /////
 
-var iframe = document.getElementsByName("Menue");
-var elmnt = iframe.contentWindow.document.getElementsByTagName("H1")[0];
+var iframe =  window.frames['Menue'].document;
 
 
-for (const a of iframe.contentWindow.document.querySelectorAll("a")) {
-  if (a.textContent.includes("Kommt")) {
-    //a.click();
+for (const a of iframe.querySelectorAll("a")) {
+  if (a.textContent.includes("Hauptmen")) {
+    a.click();
     console.log(a);
   }
 }
+
