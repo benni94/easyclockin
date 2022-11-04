@@ -47,6 +47,15 @@ export const InputAdvanced: React.FC<InputAdvancedProps> = (props) => {
                 id="htmlButton"
             />
             <Input
+                {...(register("htmlIframe"))}
+                width={420}
+                margin="normal"
+                defaultValue={savings().getDataFromLocalStorage().htmlIframe}
+                label="Iframe in Html - name:"
+                variant="standard"
+                id="htmlIframe"
+            />
+            <Input
                 {...(register("clockIn"))}
                 width={420}
                 margin="normal"

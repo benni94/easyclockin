@@ -1,5 +1,9 @@
 export interface FinderArgs {
     /**
+     * The iframe name, if the seccond page is wrapped in one.
+     */
+    htmlIframe?: string;
+    /**
      * The type of the html element like a or div.
      */
     htmlElement: keyof HTMLElementTagNameMap;
@@ -27,7 +31,7 @@ export interface FinderArgs {
  */
 export const findAndExecuteInDom = (args: FinderArgs[]) => {
     args.forEach(arg => {
-        const doc = document.querySelectorAll(arg.htmlElement);
+        const doc = arg.htmlIframe?.length ? document.getElementsByName(arg.htmlIframe)[0].querySelectorAll(arg.htmlElement) : document.querySelectorAll(arg.htmlElement);
         const matches = Array.prototype.slice.call(doc);
         const filterElements = (element: HTMLInputElement) => {
             return element[arg.textPlacement]?.toString().includes(arg.textContent);
@@ -42,5 +46,3 @@ export const findAndExecuteInDom = (args: FinderArgs[]) => {
     // necessary for the next step in chrome scripts if needed
     return true;
 }
-
-

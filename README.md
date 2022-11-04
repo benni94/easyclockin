@@ -38,3 +38,25 @@ const findAndExecuteInDom = (args) => {
 }
 
 findAndExecuteInDom([{htmlElement:"a", textPlacement:"textContent", textContent:"categories"}]);
+
+//////
+
+const text = 'Kommt';
+
+const matches = [];
+
+for (const div of document.querySelectorAll('a')) { if (div.textContent.includes(text)) { div.click() matches.push(div); } }
+
+console.log(matches);
+
+//////
+
+const text = 'Kommt';
+
+for (const div of document.querySelectorAll('a')) { if (div.textContent.includes(text)) { div.click() } }
+
+/////
+
+var iframe = window.frames['Menue'].document;
+
+for (const a of iframe.querySelectorAll("a")) { if (a.textContent.includes("Hauptmen")) { a.click(); console.log(a); } }

@@ -3,6 +3,7 @@ export type FormValues = {
     clockIn: string;
     clockOut: string;
     htmlButton: string;
+    htmlIframe?: string;
     htmlPassword: string;
     htmlUsername: string;
     linkToPage: string;

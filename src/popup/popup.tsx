@@ -43,7 +43,6 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
 
   const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
     const args = savings().getDataFromLocalStorage();
-    console.log('args', args);
     executeClockin(
       [
         { func: "value", htmlElement: "input", textContent: args.htmlUsername, textPlacement: "name", value: args.username },
@@ -51,7 +50,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
         { func: "click", htmlElement: "input", textContent: args.htmlButton, textPlacement: "value" }
       ],
       clockIn !== "login" ? [
-        { func: "click", htmlElement: "a", textContent: clockIn === "clockIn" ? args.clockIn : args.clockOut, textPlacement: "textContent" },
+        { func: "click", htmlIframe: args.htmlIframe, htmlElement: "a", textContent: clockIn === "clockIn" ? args.clockIn : args.clockOut, textPlacement: "textContent" },
       ] : undefined,
     )
     switcher(false);
