@@ -64,3 +64,17 @@ for (const div of document.querySelectorAll('a')) {
 	div.click()
   }
 }
+
+
+/////
+
+var iframe = document.getElementsByName("Menue");
+var elmnt = iframe.contentWindow.document.getElementsByTagName("H1")[0];
+
+
+for (const a of iframe.contentWindow.document.querySelectorAll("a")) {
+  if (a.textContent.includes("Kommt")) {
+    //a.click();
+    console.log(a);
+  }
+}
