@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build && mv build easyClockIn",
+    "build": "INLINE_RUNTIME_CHUNK=false react-scripts build && rm -rf easyClockIn && mv build easyClockIn",
     "pack": "NODE_ENV=production npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
