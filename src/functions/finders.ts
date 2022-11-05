@@ -30,9 +30,13 @@ export interface FinderArgs {
  * inline text.
  */
 export const findAndExecuteInDom = (args: FinderArgs[]) => {
+    const doc = args[0].htmlIframe?.length ?
+        (window as any).frames[args[0].htmlIframe].document.querySelectorAll(args[0].htmlElement) :
+        document.querySelectorAll(args[0].htmlElement);
+
+    const matches = Array.prototype.slice.call(doc);
+
     args.forEach(arg => {
-        const doc = arg.htmlIframe?.length ? document.getElementsByName(arg.htmlIframe)[0].querySelectorAll(arg.htmlElement) : document.querySelectorAll(arg.htmlElement);
-        const matches = Array.prototype.slice.call(doc);
         const filterElements = (element: HTMLInputElement) => {
             return element[arg.textPlacement]?.toString().includes(arg.textContent);
         }
@@ -42,6 +46,9 @@ export const findAndExecuteInDom = (args: FinderArgs[]) => {
         if (arg.func === "click") {
             matches.filter(filterElements)[0].click();
         }
+
+        //arg.htmlIframe?.length ? (window as any).frames[arg.htmlIframe || ''].document.querySelectorAll(arg.htmlElement) :
+
     })
     // necessary for the next step in chrome scripts if needed
     return true;
