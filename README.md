@@ -1,8 +1,12 @@
 ## Download 
 
-<a href="https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/benni94/easyclockin/tree/master/easyClockIn" download>Click to here to download</a>
+<a href="https://minhaskamal.github.io/DownGit/#/home?url=https:%2F%2Fgithub.com%2Fbenni94%2Feasyclockin%2Ftree%2Fmaster%2FeasyClockIn" download>Click to here to download</a>
 
-## Add the chrome extension `easy clock in`
+## Add the chrome extension `easy clock in` to chrome
+
+<img style="display: block;-webkit-user-select: none;margin: auto;cursor: zoom-in;background-color: hsl(0, 0%, 90%);" src="https://bashvlas.com/blog/install-chrome-extension-in-developer-mode/example.gif" width="737" height="414">
+
+https://bashvlas.com/blog/install-chrome-extension-in-developer-mode/
 
 ## Build the script
 
@@ -18,61 +22,5 @@ go to chrome extensions, manage extension and load unpacked to test it
 
 after that, you can build and click in the management extensions `update`
 
-pack and make it usable in the app store
+pack it and make it usable in the app store:
 https://github.com/lxieyang/chrome-extension-boilerplate-react
-
-
-TEST: 
-const findAndExecuteInDom = (args) => {
-    args.forEach(arg => {
-        const doc = document.querySelectorAll(arg.htmlElement);
-        const matches = Array.prototype.slice.call(doc);
-        const filterElements = (element) => {
-            return element[arg.textPlacement]?.toString().includes(arg.textContent);
-        }
-        matches.filter(filterElements)[0].click();
-        
-    })
-}
-
-findAndExecuteInDom([{htmlElement:"a", textPlacement:"textContent", textContent:"categories"}]);
-
-
-//////
-
-const text = 'Kommt';
-
-const matches = [];
-
-for (const div of document.querySelectorAll('a')) {
-  if (div.textContent.includes(text)) {
-	div.click()
-    matches.push(div);
-  }
-}
-
-console.log(matches); 
-
-//////
-
-const text = 'Kommt';
-
-for (const div of document.querySelectorAll('a')) {
-  if (div.textContent.includes(text)) {
-	div.click()
-  }
-}
-
-
-/////
-
-var iframe =  window.frames['Menue'].document;
-
-
-for (const a of iframe.querySelectorAll("a")) {
-  if (a.textContent.includes("Hauptmen")) {
-    a.click();
-    console.log(a);
-  }
-}
-
