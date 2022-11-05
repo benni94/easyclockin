@@ -30,6 +30,7 @@ export interface FinderArgs {
  * inline text.
  */
 export const findAndExecuteInDom = (args: FinderArgs[]) => {
+    // if the document elements are in an iFrame, the name of the iFrames is used to find it and then search in it for the document elements
     const doc = args[0].htmlIframe?.length ?
         (window as any).frames[args[0].htmlIframe].document.querySelectorAll(args[0].htmlElement) :
         document.querySelectorAll(args[0].htmlElement);
@@ -46,9 +47,6 @@ export const findAndExecuteInDom = (args: FinderArgs[]) => {
         if (arg.func === "click") {
             matches.filter(filterElements)[0].click();
         }
-
-        //arg.htmlIframe?.length ? (window as any).frames[arg.htmlIframe || ''].document.querySelectorAll(arg.htmlElement) :
-
     })
     // necessary for the next step in chrome scripts if needed
     return true;

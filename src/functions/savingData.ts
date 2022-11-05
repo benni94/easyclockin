@@ -17,15 +17,15 @@ export const formValuesDefaults: FormValues = {
 }
 
 /* export const formValuesDefaults: FormValues = {
-    clockIn: "Browse categories",
+    clockIn: "categories",
     clockOut: "Logout",
     htmlButton: "login",
     htmlPassword: "pass",
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",
     username: "",
-} */
-
+}
+ */
 export const savings = () => {
 
     const toLocalStorage = (data: FormValues) => {

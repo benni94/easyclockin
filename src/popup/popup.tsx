@@ -45,12 +45,35 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
     const args = savings().getDataFromLocalStorage();
     executeClockin(
       [
-        { func: "value", htmlElement: "input", textContent: args.htmlUsername, textPlacement: "name", value: args.username },
-        { func: "value", htmlElement: "input", textContent: args.htmlPassword, textPlacement: "name", value: getValues().password || "" },
-        { func: "click", htmlElement: "input", textContent: args.htmlButton, textPlacement: "value" }
+        {
+          func: "value",
+          htmlElement: "input",
+          textContent: args.htmlUsername,
+          textPlacement: "name",
+          value: args.username
+        },
+        {
+          func: "value",
+          htmlElement: "input",
+          textContent: args.htmlPassword,
+          textPlacement: "name",
+          value: getValues().password || ""
+        },
+        {
+          func: "click",
+          htmlElement: "input",
+          textContent: args.htmlButton,
+          textPlacement: "value"
+        }
       ],
       clockIn !== "login" ? [
-        { func: "click", htmlIframe: args.htmlIframe, htmlElement: "a", textContent: clockIn === "clockIn" ? args.clockIn : args.clockOut, textPlacement: "textContent" },
+        {
+          func: "click",
+          htmlIframe: args.htmlIframe,
+          htmlElement: "a",
+          textContent: clockIn === "clockIn" ? args.clockIn : args.clockOut,
+          textPlacement: "textContent"
+        },
       ] : undefined,
     )
     switcher(false);
