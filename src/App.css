@@ -1,3 +1,8 @@
 .App {
   width: 600px;
 }
+
+#__react-alert__ div div div {
+  width: auto !important;
+  background-color: #485461 !important;
+}

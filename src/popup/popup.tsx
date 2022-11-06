@@ -13,12 +13,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import { useAlert } from "react-alert";
 
 export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
   const onSubmit: SubmitHandler<FormValues> = result => savings().toLocalStorage(result);
   const [onLoginUrl, setOnLoginUrl] = useState(false);
   const [clockedIn, setClockedIn] = useState(clockerClicked().getDataFromLocalStorage());
+  const alert = useAlert();
 
   useEffect(() => {
     getCurrentUrl().then((currentUrl) => {
@@ -33,7 +35,8 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
   const clear = useCallback(() => {
     reset(formValuesDefaults);
     savings().removeFromLocalStorage();
-  }, [reset]);
+    alert.error("Clear executed!");
+  }, [alert, reset]);
 
   const switcher = useCallback((shouldChange: boolean) => {
     const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
@@ -136,6 +139,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   <DefaultButton
                     type="submit"
                     title="Set"
+                    onClick={() => alert.success("Set executed!")}
                     variant="outlined"
                     disabled={!isDirty || !isValid}
                   />
