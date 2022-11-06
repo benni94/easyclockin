@@ -85,6 +85,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
       <div>
         <Collapse
           appWidth={appWidth}
+          defaultClosed={savings().getDataFromLocalStorage().username.length > 1}
           collapsedIcon={<AddIcon />}
           openIcon={<RemoveIcon />}
           labelCollapsed="Settings:"

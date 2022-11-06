@@ -3,7 +3,8 @@ import React, { ReactNode, useCallback, useState } from "react";
 import "./collapse.css";
 
 export type ICollapseProps = {
-  appWidth: (size: number) => void
+  appWidth: (size: number) => void;
+  defaultClosed?: boolean;
   collapsedIcon: React.ReactNode;
   content: ReactNode;
   collapsedWidth: number;
@@ -14,15 +15,13 @@ export type ICollapseProps = {
 };
 
 const Collapse: React.FC<ICollapseProps> = (props) => {
-  const { appWidth, collapsedIcon, content, collapsedWidth, labelCollapsed, labelOpen, openIcon, openWidth } = props;
-  const [collapsed, setCollapsed] = useState(true);
-
+  const { appWidth, defaultClosed = true, collapsedIcon, content, collapsedWidth, labelCollapsed, labelOpen, openIcon, openWidth } = props;
+  const [collapsed, setCollapsed] = useState(defaultClosed);
 
   const collapse = useCallback(() => {
     setCollapsed((collapsed) => !collapsed);
     !collapsed ? appWidth(collapsedWidth) : appWidth(openWidth);
   }, [appWidth, collapsed, collapsedWidth, openWidth]);
-
 
   return (
     <>

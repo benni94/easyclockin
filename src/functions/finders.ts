@@ -1,16 +1,16 @@
 export interface FinderArgs {
     /**
-     * The iframe name, if the seccond page is wrapped in one.
+     * The function which should be executed.
      */
-    htmlIframe?: string;
+    func: 'click' | 'value';
     /**
      * The type of the html element like a or div.
      */
     htmlElement: keyof HTMLElementTagNameMap;
     /**
-     * The function which should be executed.
+     * The iframe name, if the seccond page is wrapped in one.
      */
-    func: 'click' | 'value';
+    htmlIframe?: string;
     /**
      * The inline text of the html element.
      */

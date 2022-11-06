@@ -24,8 +24,9 @@ export const formValuesDefaults: FormValues = {
     htmlUsername: "uname",
     linkToPage: "http://testphp.vulnweb.com/login.php",
     username: "",
-}
- */
+} */
+
+
 export const savings = () => {
 
     const toLocalStorage = (data: FormValues) => {
