@@ -41,11 +41,14 @@ export const findAndExecuteInDom = (args: FinderArgs[]) => {
         const filterElements = (element: HTMLInputElement) => {
             return element[arg.textPlacement]?.toString().includes(arg.textContent);
         }
+
         if (arg.func === "value") {
             matches.filter(filterElements)[0][arg.func] = arg.value;
         }
         if (arg.func === "click") {
-            matches.filter(filterElements)[0].click();
+            setTimeout(() => {
+                matches.filter(filterElements)[0].click();
+            }, 500);
         }
     })
     // necessary for the next step in chrome scripts if needed

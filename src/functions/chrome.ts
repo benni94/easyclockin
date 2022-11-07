@@ -1,5 +1,12 @@
 import { FinderArgs, findAndExecuteInDom } from "./finders";
 
+const closeWindow = (results: chrome.scripting.InjectionResult[], exec = true) => {
+  if (results[0].result && exec) {
+    window.close();
+  }
+}
+
+
 export function sendMessageToConsole(fun: (arg: chrome.tabs.Tab[]) => void) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
@@ -30,18 +37,15 @@ export function executeClockin(args1: FinderArgs[], args2?: FinderArgs[]) {
       .then(results => {
         chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab,) => {
           // if the findInDom from args1 returns true, the second script could be executed
-          const closeWindow = () => { if (results[0].result) window.close(); }
           if (changeInfo.status === 'complete' && args2) {
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id || 0 },
               func: findAndExecuteInDom,
               args: [args2],
             })
-            closeWindow();
+            closeWindow(results);
           }
-          if (changeInfo.status === "complete" && !args2) {
-            closeWindow();
-          }
+          closeWindow(results, changeInfo.status === "complete" && !args2);
         })
       })
   });
