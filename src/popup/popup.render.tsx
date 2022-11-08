@@ -7,8 +7,7 @@ interface InputAdvancedProps {
     register: UseFormRegister<FormValues>
 }
 
-export const InputAdvanced: React.FC<InputAdvancedProps> = (props) => {
-    const { register } = props;
+export const InputAdvanced: React.FC<InputAdvancedProps> = ({ register }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <Input

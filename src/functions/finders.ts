@@ -1,5 +1,9 @@
 export interface FinderArgs {
     /**
+     * Disable the finder function and return instantly true.
+     */
+    disabled?: boolean;
+    /**
      * The function which should be executed.
      */
     func: 'click' | 'value';
@@ -30,6 +34,8 @@ export interface FinderArgs {
  * inline text.
  */
 export const findAndExecuteInDom = (args: FinderArgs[]) => {
+    if (args[0].disabled) return true;
+
     // if the document elements are in an iFrame, the name of the iFrames is used to find it and then search in it for the document elements
     const doc = args[0].htmlIframe?.length ?
         (window as any).frames[args[0].htmlIframe].document.querySelectorAll(args[0].htmlElement) :

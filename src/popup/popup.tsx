@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
 import { Input } from "../components/Input/input";
-import { navigateToUrl, executeClockin, getCurrentUrl } from "../functions/chrome";
+import { navigateToUrl, getCurrentUrl } from "../functions/chrome";
 import "./popup.css";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
@@ -14,6 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { useAlert } from "react-alert";
+import { renderClockIn } from "./renderClockIn";
 
 export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
@@ -46,39 +47,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
 
   const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
     const args = savings().getDataFromLocalStorage();
-    executeClockin(
-      [
-        {
-          func: "value",
-          htmlElement: "input",
-          textContent: args.htmlUsername,
-          textPlacement: "name",
-          value: args.username
-        },
-        {
-          func: "value",
-          htmlElement: "input",
-          textContent: args.htmlPassword,
-          textPlacement: "name",
-          value: getValues().password || ""
-        },
-        {
-          func: "click",
-          htmlElement: "input",
-          textContent: args.htmlButton,
-          textPlacement: "value"
-        }
-      ],
-      clockIn !== "login" ? [
-        {
-          func: "click",
-          htmlIframe: args.htmlIframe,
-          htmlElement: "a",
-          textContent: clockIn === "clockIn" ? args.clockIn : args.clockOut,
-          textPlacement: "textContent"
-        },
-      ] : undefined,
-    )
+    renderClockIn(args, clockIn, getValues().password);
     switcher(false);
   }, [getValues, switcher]);
 

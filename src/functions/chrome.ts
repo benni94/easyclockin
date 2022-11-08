@@ -6,7 +6,6 @@ const closeWindow = (results: chrome.scripting.InjectionResult[], exec = true) =
   }
 }
 
-
 export function sendMessageToConsole(fun: (arg: chrome.tabs.Tab[]) => void) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
@@ -27,7 +26,7 @@ export async function getCurrentUrl() {
   return tab.url
 }
 
-export function executeClockin(args1: FinderArgs[], args2?: FinderArgs[]) {
+export function executeClockin(args1: FinderArgs[], args2: FinderArgs[]) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
       target: { tabId: tabs[0].id || 0 },
@@ -37,7 +36,7 @@ export function executeClockin(args1: FinderArgs[], args2?: FinderArgs[]) {
       .then(results => {
         chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab,) => {
           // if the findInDom from args1 returns true, the second script could be executed
-          if (changeInfo.status === 'complete' && args2) {
+          if (changeInfo.status === 'complete') {
             chrome.scripting.executeScript({
               target: { tabId: tabs[0].id || 0 },
               func: findAndExecuteInDom,
