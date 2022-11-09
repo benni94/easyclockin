@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import React, { ReactNode, useCallback, useState } from "react";
+import { CSSProperties } from "react";
 import "./collapse.css";
 
 export type ICollapseProps = {
@@ -12,10 +13,11 @@ export type ICollapseProps = {
   labelCollapsed: string;
   openIcon: React.ReactNode;
   openWidth: number;
+  style?: CSSProperties;
 };
 
 const Collapse: React.FC<ICollapseProps> = (props) => {
-  const { appWidth, defaultClosed = true, collapsedIcon, content, collapsedWidth, labelCollapsed, labelOpen, openIcon, openWidth } = props;
+  const { appWidth, defaultClosed = true, collapsedIcon, content, collapsedWidth, labelCollapsed, labelOpen, openIcon, openWidth, style } = props;
   const [collapsed, setCollapsed] = useState(defaultClosed);
 
   const collapse = useCallback(() => {
@@ -24,7 +26,7 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
   }, [appWidth, collapsed, collapsedWidth, openWidth]);
 
   return (
-    <>
+    <div style={style}>
       <div className="collapseWrapper">
         <Button
           startIcon={collapsed ? collapsedIcon : openIcon}
@@ -38,7 +40,7 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
         </Button>
       </div>
       {!collapsed && <>{content}</>}
-    </>
+    </div>
   );
 };
 

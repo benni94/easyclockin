@@ -2,13 +2,12 @@ import { Divider } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
-import { Input } from "../components/Input/input";
 import { navigateToUrl, getCurrentUrl } from "../functions/chrome";
 import "./popup.css";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
 import { ClockInTypes, FormValues } from "./popup.types";
-import { InputAdvanced } from "./popup.render";
+import { InputAdvanced, SmallInput } from "./popup.render";
 import SettingsIcon from '@mui/icons-material/Settings';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -40,100 +39,102 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
   }, [alert, reset]);
 
   const switcher = useCallback((shouldChange: boolean) => {
-    const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
-    clockerClicked().toLocalStorage(clicked);
-    if (shouldChange) setClockedIn(clicked);
+    if (shouldChange) {
+      const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
+      setClockedIn(clicked);
+      clockerClicked().toLocalStorage(clicked);
+    }
   }, [clockedIn]);
 
   const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
     const args = savings().getDataFromLocalStorage();
     renderClockIn(args, clockIn, getValues().password);
-    switcher(false);
-  }, [getValues, switcher]);
+    if (clockIn !== "login") clockerClicked().toLocalStorage(clockedIn === "clockIn" ? "clockOut" : "clockIn");
+  }, [clockedIn, getValues]);
 
   return (
-    <div>
-      <br />
-      <div>
-        <Collapse
-          appWidth={appWidth}
-          defaultClosed={savings().getDataFromLocalStorage().username.length > 1}
-          collapsedIcon={<AddIcon />}
-          openIcon={<RemoveIcon />}
-          labelCollapsed="Settings:"
-          labelOpen="Settings:"
-          collapsedWidth={220}
-          openWidth={220}
-          content={
-            <div className="collapseContent">
-
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Collapse
-                  appWidth={appWidth}
-                  collapsedWidth={220}
-                  collapsedIcon={<SettingsIcon />}
-                  openIcon={<SettingsSuggestIcon />}
-                  openWidth={600}
-                  content={
-                    <>
-                      <InputAdvanced
-                        register={register}
-                      />
-                      <Divider
-                        style={{ marginLeft: "30px", marginRight: "30px" }}
-                        sx={{ height: 20, m: 0.5 }}
-                        orientation="horizontal" />
-                    </>
-                  }
-                  labelCollapsed="Advanced:"
-                  labelOpen="Advanced:"
+    <>
+      <Collapse
+        appWidth={appWidth}
+        defaultClosed={savings().getDataFromLocalStorage().username.length > 1}
+        collapsedIcon={<AddIcon />}
+        openIcon={<RemoveIcon />}
+        labelCollapsed="Settings:"
+        labelOpen="Settings:"
+        collapsedWidth={220}
+        openWidth={220}
+        style={{ paddingTop: "15px" }}
+        content={
+          <div className="collapseContent">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Collapse
+                appWidth={appWidth}
+                collapsedWidth={220}
+                collapsedIcon={<SettingsIcon />}
+                openIcon={<SettingsSuggestIcon />}
+                openWidth={600}
+                content={
+                  <>
+                    <InputAdvanced
+                      register={register}
+                    />
+                    <Divider
+                      style={{ marginLeft: "30px", marginRight: "30px" }}
+                      sx={{ height: 20, m: 0.5 }}
+                      orientation="horizontal" />
+                  </>
+                }
+                labelCollapsed="Advanced:"
+                labelOpen="Advanced:"
+              />
+              <div className="usernameWrapper">
+                <SmallInput
+                  register={register}
+                  rand={{
+                    id: "username",
+                    label: "Username:",
+                    register: "username",
+                    variant: "standard",
+                  }}
                 />
-                <div className="usernameWrapper">
-                  <Input
-                    {...register("username", { required: true })}
-                    defaultValue={savings().getDataFromLocalStorage().username}
-                    label="Username:"
-                    variant="standard"
-                    id="username"
-                    width={150}
-                  />
-                </div>
-                <div className="setResetWrapper">
-                  <DefaultButton
-                    onClick={clear}
-                    title="Clear"
-                    color="error"
-                    variant="outlined"
-                  />
-                  <DefaultButton
-                    type="submit"
-                    title="Set"
-                    onClick={() => alert.success("Set executed!")}
-                    variant="outlined"
-                    disabled={!isDirty || !isValid}
-                  />
-                </div>
-                <Divider
-                  style={{ marginLeft: "30px", marginRight: "30px" }}
-                  sx={{ height: 20, m: 0.5 }}
-                  orientation="horizontal" />
-              </form>
-            </div >
-          }
-        />
-      </div >
+              </div>
+              <div className="setResetWrapper">
+                <DefaultButton
+                  onClick={clear}
+                  title="Clear"
+                  color="error"
+                  variant="outlined"
+                />
+                <DefaultButton
+                  type="submit"
+                  title="Set"
+                  onClick={() => alert.success("Set executed!")}
+                  variant="outlined"
+                  disabled={!isDirty || !isValid}
+                />
+              </div>
+              <Divider
+                style={{ marginLeft: "30px", marginRight: "30px" }}
+                sx={{ height: 20, m: 0.5 }}
+                orientation="horizontal" />
+            </form>
+          </div >
+        }
+      />
       <div className="buttonExecuteWrapper">
         {onLoginUrl ?
           <>
             <div className="bottomElementsWrapper">
-              <Input
-                autoFocus
-                {...register("password")}
-                width={150}
-                label="Password:"
-                type="password"
-                variant="standard"
-                id="password"
+              <SmallInput
+                register={register}
+                rand={{
+                  autoFocus: true,
+                  onKeyDown: (e) => { if (e.key === "Enter") { clockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut") } },
+                  id: "password",
+                  label: "Password:",
+                  register: "password",
+                  variant: "standard",
+                }}
               />
               <div className="bottomActionButtonWrapper">
                 {
@@ -177,8 +178,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
             variant="contained"
           />
         }
-
       </div>
-    </div >
+    </>
   );
 };

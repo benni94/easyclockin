@@ -4,74 +4,120 @@ import { savings } from "../functions/savingData";
 import { FormValues } from "./popup.types";
 
 interface InputAdvancedProps {
-    register: UseFormRegister<FormValues>
+    register: UseFormRegister<FormValues>;
 }
+
+interface IPopupRender {
+    autoFocus?: boolean,
+    defaultValue?: unknown;
+    id: string;
+    label: string;
+    margin?: "none" | "dense" | "normal" | undefined;
+    onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
+    register: keyof FormValues;
+    variant?: 'standard' | 'outlined' | 'filled';
+    width?: number;
+}
+
+const popupRender: IPopupRender[] = [
+    {
+        defaultValue: savings().getDataFromLocalStorage().linkToPage,
+        id: "linkToPage",
+        label: "Link to clock in page:",
+        margin: "dense",
+        register: "clockIn",
+        variant: "standard",
+        width: 420,
+    },
+    {
+        defaultValue: savings().getDataFromLocalStorage().htmlUsername,
+        id: "htmlUsername",
+        label: "Username Html - name:",
+        margin: "normal",
+        register: "htmlUsername",
+        variant: "standard",
+        width: 420,
+    },
+    {
+        defaultValue: savings().getDataFromLocalStorage().htmlPassword,
+        id: "htmlPassword",
+        label: "Password Html - name:",
+        margin: "dense",
+        register: "htmlPassword",
+        variant: "standard",
+        width: 420,
+    },
+    {
+        defaultValue: savings().getDataFromLocalStorage().htmlButton,
+        id: "htmlButton",
+        label: "Button Html - value:",
+        margin: "dense",
+        register: "htmlButton",
+        variant: "standard",
+        width: 420,
+    },
+    {
+        defaultValue: savings().getDataFromLocalStorage().htmlIframe,
+        id: "htmlIframe",
+        label: "Iframe in Html - name:",
+        margin: "normal",
+        register: "htmlIframe",
+        variant: "standard",
+        width: 420,
+    },
+    {
+        defaultValue: savings().getDataFromLocalStorage().clockIn,
+        id: "linkToCome",
+        label: "Clock in Html - textContent:",
+        margin: "normal",
+        register: "clockIn",
+        variant: "standard",
+        width: 420,
+    },
+    {
+        defaultValue: savings().getDataFromLocalStorage().clockOut,
+        id: "linkToGo",
+        label: "Clock out Html - textContent:",
+        margin: "dense",
+        register: "clockOut",
+        variant: "standard",
+        width: 420,
+    }
+]
 
 export const InputAdvanced: React.FC<InputAdvancedProps> = ({ register }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <Input
-                {...(register("linkToPage"))}
-                width={420}
-                defaultValue={savings().getDataFromLocalStorage().linkToPage}
-                label="Link to clock in page:"
-                variant="standard"
-                id="linkToPage"
-            />
-            <Input
-                {...register("htmlUsername")}
-                width={420}
-                margin="normal"
-                defaultValue={savings().getDataFromLocalStorage().htmlUsername}
-                label="Username Html - name:"
-                variant="standard"
-                id="htmlUsername"
-            />
-            <Input
-                {...register("htmlPassword")}
-                width={420}
-                margin="dense"
-                defaultValue={savings().getDataFromLocalStorage().htmlPassword}
-                label="Password Html - name:"
-                variant="standard"
-                id="htmlPassword"
-            />
-            <Input
-                {...register("htmlButton")}
-                width={420}
-                margin="dense"
-                defaultValue={savings().getDataFromLocalStorage().htmlButton}
-                label="Button Html - value:"
-                variant="standard"
-                id="htmlButton"
-            />
-            <Input
-                {...(register("htmlIframe"))}
-                width={420}
-                margin="normal"
-                defaultValue={savings().getDataFromLocalStorage().htmlIframe}
-                label="Iframe in Html - name:"
-                variant="standard"
-                id="htmlIframe"
-            />
-            <Input
-                {...(register("clockIn"))}
-                width={420}
-                margin="normal"
-                defaultValue={savings().getDataFromLocalStorage().clockIn}
-                label="Clock in Html - textContent:"
-                variant="standard"
-                id="linkToCome"
-            />
-            <Input
-                {...(register("clockOut"))}
-                width={420}
-                margin="dense"
-                defaultValue={savings().getDataFromLocalStorage().clockOut}
-                label="Clock out Html - textContent:"
-                variant="standard"
-                id="linkToGo"
-            />
+            {popupRender.map((popup) =>
+                <div style={{ paddingTop: "10px" }}>
+                    <Input
+                        {...(register(popup.register))}
+                        defaultValue={popup.defaultValue}
+                        id={popup.id}
+                        label={popup.label}
+                        variant={popup.variant}
+                        width={popup.width}
+                    />
+                </div>
+            )}
         </div >
+    )
+};
+
+export const SmallInput: React.FC<InputAdvancedProps & { rand: IPopupRender }> = (props) => {
+    const { rand, rand: { autoFocus, defaultValue, id, label, margin, onKeyDown, variant = "standard", width = 150 }, register } = props;
+
+    return (
+        <Input
+            {...(register(rand.register))}
+            autoFocus={autoFocus}
+            defaultValue={defaultValue}
+            id={id}
+            label={label}
+            margin={margin}
+            onKeyDown={onKeyDown}
+            variant={variant}
+            width={width}
+        />
     )
 };

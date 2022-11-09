@@ -2,7 +2,6 @@ import { FormValues } from "../popup/popup.types";
 
 export const chromeLocalStorageItem = "savings";
 export const clockerClickedState = "clocker";
-
 export type Clocker = "clockIn" | "clockOut";
 
 export const formValuesDefaults: FormValues = {

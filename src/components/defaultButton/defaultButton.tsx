@@ -9,22 +9,24 @@ export type IDefaultButtonProps = {
   color?: Color;
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement> | undefined;
   ref?: React.RefObject<HTMLButtonElement> | ((instance: HTMLButtonElement | null) => void) | null | undefined
-  title: string;
-  type?: "submit" | "reset" | "button" | undefined;
   size?: Size;
   style?: React.CSSProperties;
+  title: string;
+  type?: "submit" | "reset" | "button" | undefined;
   variant?: Variant;
 };
 
 const DefaultButton: React.FC<IDefaultButtonProps> = (props) => {
-  const { color, disabled, onClick, ref, title, type, size, style, variant } = props;
+  const { color, disabled, onClick, onKeyDown, ref, size, style, title, type, variant } = props;
 
   return (
     <Button
       color={color}
       disabled={disabled}
       onClick={onClick}
+      onKeyDown={onKeyDown}
       ref={ref}
       size={size}
       style={style}
