@@ -92,11 +92,7 @@ export const InputAdvanced: React.FC<InputAdvancedProps> = ({ register }) => {
                 <div style={{ paddingTop: "10px" }}>
                     <Input
                         {...(register(popup.register))}
-                        defaultValue={popup.defaultValue}
-                        id={popup.id}
-                        label={popup.label}
-                        variant={popup.variant}
-                        width={popup.width}
+                        {...popup}
                     />
                 </div>
             )}
@@ -105,19 +101,14 @@ export const InputAdvanced: React.FC<InputAdvancedProps> = ({ register }) => {
 };
 
 export const SmallInput: React.FC<InputAdvancedProps & { rand: IPopupRender }> = (props) => {
-    const { rand, rand: { autoFocus, defaultValue, id, label, margin, onKeyDown, variant = "standard", width = 150 }, register } = props;
+    const { rand, rand: { variant = "standard", width = 150 }, register } = props;
 
     return (
         <Input
             {...(register(rand.register))}
-            autoFocus={autoFocus}
-            defaultValue={defaultValue}
-            id={id}
-            label={label}
-            margin={margin}
-            onKeyDown={onKeyDown}
             variant={variant}
             width={width}
+            {...rand}
         />
     )
 };
