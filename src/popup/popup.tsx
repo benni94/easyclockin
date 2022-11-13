@@ -1,19 +1,17 @@
-import { Divider } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
-import { Collapse } from "../components/collapse/collapse";
-import { DefaultButton } from "../components/defaultButton/defaultButton";
-import { navigateToUrl, getCurrentUrl } from "../functions/chrome";
-import "./popup.css";
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
 import { ClockInTypes, FormValues } from "./popup.types";
-import { InputAdvanced, SmallInput } from "./popup.render";
-import SettingsIcon from '@mui/icons-material/Settings';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import { Collapse } from "../components/collapse/collapse";
+import { DefaultButton } from "../components/defaultButton/defaultButton";
+import { Divider } from "@mui/material";
+import { navigateToUrl, getCurrentUrl } from "../functions/chrome";
+import { linkToPage, renderClockIn, renderClockInHomeOffice } from "../functions/renderClockIn";
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAlert } from "react-alert";
-import { renderClockIn } from "./renderClockIn";
+import AddIcon from '@mui/icons-material/Add';
+import React, { useCallback, useEffect, useState } from "react";
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Input } from "../components/Input/input";
+import "./popup.css";
 
 export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
@@ -24,12 +22,12 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
 
   useEffect(() => {
     getCurrentUrl().then((currentUrl) => {
-      currentUrl === savings().getDataFromLocalStorage().linkToPage ? setOnLoginUrl(true) : setOnLoginUrl(false);
+      currentUrl === linkToPage ? setOnLoginUrl(true) : setOnLoginUrl(false);
     })
   }, []);
 
   const navigate = useCallback(() => {
-    navigateToUrl(savings().getDataFromLocalStorage().linkToPage);
+    navigateToUrl(linkToPage);
   }, []);
 
   const clear = useCallback(() => {
@@ -48,7 +46,13 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
 
   const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
     const args = savings().getDataFromLocalStorage();
-    renderClockIn(args, clockIn, getValues().password);
+    renderClockIn(clockIn, args.username, getValues().password);
+    if (clockIn !== "login") clockerClicked().toLocalStorage(clockedIn === "clockIn" ? "clockOut" : "clockIn");
+  }, [clockedIn, getValues]);
+
+  const homeOfficeClockInClockOut = useCallback((clockIn: ClockInTypes) => {
+    const args = savings().getDataFromLocalStorage();
+    renderClockInHomeOffice(clockIn, args.username, getValues().password);
     if (clockIn !== "login") clockerClicked().toLocalStorage(clockedIn === "clockIn" ? "clockOut" : "clockIn");
   }, [clockedIn, getValues]);
 
@@ -67,7 +71,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
         content={
           <div className="collapseContent">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <Collapse
+              {/*  <Collapse
                 appWidth={appWidth}
                 collapsedWidth={220}
                 collapsedIcon={<SettingsIcon />}
@@ -75,7 +79,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                 openWidth={600}
                 content={
                   <>
-                    <InputAdvanced
+                     <InputAdvanced
                       register={register}
                     />
                     <Divider
@@ -86,16 +90,15 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                 }
                 labelCollapsed="Advanced:"
                 labelOpen="Advanced:"
-              />
+              /> */}
               <div className="usernameWrapper">
-                <SmallInput
-                  register={register}
-                  rand={{
-                    id: "username",
-                    label: "Username:",
-                    register: "username",
-                    variant: "standard",
-                  }}
+                <Input
+                  {...(register("username"))}
+                  id="username"
+                  defaultValue={savings().getDataFromLocalStorage().username}
+                  label="Username:"
+                  variant="standard"
+                  width={150}
                 />
               </div>
               <div className="setResetWrapper">
@@ -125,16 +128,15 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
         {onLoginUrl ?
           <>
             <div className="bottomElementsWrapper">
-              <SmallInput
-                register={register}
-                rand={{
-                  autoFocus: true,
-                  onKeyDown: (e) => { if (e.key === "Enter") { clockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut") } },
-                  id: "password",
-                  label: "Password:",
-                  register: "password",
-                  variant: "standard",
-                }}
+              <Input
+                {...(register("password"))}
+                autoFocus={true}
+                id="password"
+                onKeyDown={(e) => { if (e.key === "Enter") { clockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut") } }}
+                label="Password:"
+                variant="standard"
+                type={"password"}
+                width={150}
               />
               <div className="bottomActionButtonWrapper">
                 {
@@ -162,9 +164,28 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   title="↔️"
                 />
               </div>
+              <div className="bottomActionButtonWrapper">
+                {
+                  clockedIn === "clockIn" ?
+                    <DefaultButton
+                      color="success"
+                      onClick={() => homeOfficeClockInClockOut("clockIn")}
+                      style={{ minWidth: "160px", maxWidth: "160px", padding: "10px" }}
+                      title="Homeoffice in"
+                      variant="outlined"
+                    /> :
+                    <DefaultButton
+                      color="secondary"
+                      onClick={() => homeOfficeClockInClockOut("clockOut")}
+                      style={{ minWidth: "160px", maxWidth: "160px", padding: "10px" }}
+                      title="Homeoffice out"
+                      variant="outlined"
+                    />
+                }
+              </div>
               <DefaultButton
                 onClick={() => clockInClockOut("login")}
-                style={{ minWidth: "130px", maxWidth: "130px", marginRight: "29px" }}
+                style={{ minWidth: "160px", maxWidth: "160px" }}
                 title="Only login"
                 variant="outlined"
               />

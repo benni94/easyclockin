@@ -1,6 +1,4 @@
-import { Input } from "../components/Input/input";
 import { UseFormRegister } from "react-hook-form";
-import { savings } from "../functions/savingData";
 import { FormValues } from "./popup.types";
 
 interface InputAdvancedProps {
@@ -9,16 +7,17 @@ interface InputAdvancedProps {
 
 interface IPopupRender {
     autoFocus?: boolean,
-    defaultValue?: unknown;
+    defaultValue?: string;
     id: string;
     label: string;
     margin?: "none" | "dense" | "normal" | undefined;
     onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
     register: keyof FormValues;
+    type?: React.InputHTMLAttributes<unknown>['type'];
     variant?: 'standard' | 'outlined' | 'filled';
     width?: number;
 }
-
+/* 
 const popupRender: IPopupRender[] = [
     {
         defaultValue: savings().getDataFromLocalStorage().linkToPage,
@@ -57,11 +56,11 @@ const popupRender: IPopupRender[] = [
         width: 420,
     },
     {
-        defaultValue: savings().getDataFromLocalStorage().htmlIframe,
+        defaultValue: savings().getDataFromLocalStorage().htmlIframeClockIn,
         id: "htmlIframe",
         label: "Iframe in Html - name:",
         margin: "normal",
-        register: "htmlIframe",
+        register: "htmlIframeClockIn",
         variant: "standard",
         width: 420,
     },
@@ -112,3 +111,4 @@ export const SmallInput: React.FC<InputAdvancedProps & { rand: IPopupRender }> =
         />
     )
 };
+ */

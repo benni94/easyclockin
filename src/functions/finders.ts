@@ -6,7 +6,7 @@ export interface FinderArgs {
     /**
      * The function which should be executed.
      */
-    func: 'click' | 'value';
+    func: 'click' | 'select' | 'value';
     /**
      * The type of the html element like a or div.
      */
@@ -33,30 +33,35 @@ export interface FinderArgs {
  * This is a function to find a html element with the specific type and specific (no difference or shorts) 
  * inline text.
  */
-export const findAndExecuteInDom = (args: FinderArgs[]) => {
-    if (args[0].disabled) return true;
+export const findAndExecuteInDom = (args: FinderArgs[] | undefined) => {
+    if (!args || args[0].disabled) return true;
+    args.forEach((arg, i) => {
+        // if the document elements are in an iFrame, the name of the iFrames is used to find it and then search in it for the document elements
+        let doc = arg.htmlIframe?.length ?
+            (window as any).frames[arg.htmlIframe].document.querySelectorAll(arg.htmlElement) :
+            document.querySelectorAll(arg.htmlElement);
 
-    // if the document elements are in an iFrame, the name of the iFrames is used to find it and then search in it for the document elements
-    const doc = args[0].htmlIframe?.length ?
-        (window as any).frames[args[0].htmlIframe].document.querySelectorAll(args[0].htmlElement) :
-        document.querySelectorAll(args[0].htmlElement);
+        let matches = Array.prototype.slice.call(doc);
 
-    const matches = Array.prototype.slice.call(doc);
-
-    args.forEach(arg => {
         const filterElements = (element: HTMLInputElement) => {
             return element[arg.textPlacement]?.toString().includes(arg.textContent);
         }
 
         if (arg.func === "value") {
             matches.filter(filterElements)[0][arg.func] = arg.value;
+            if (i === args.length) return true;
         }
         if (arg.func === "click") {
             setTimeout(() => {
                 matches.filter(filterElements)[0].click();
-            }, 500);
+            }, 200);
+        }
+        if (arg.func === "select") {
+            setTimeout(() => {
+                matches.filter(filterElements)[0].selectedIndex = arg.value;
+            }, 200);
         }
     })
-    // necessary for the next step in chrome scripts if needed
     return true;
+    // necessary for the next step in chrome scripts if needed
 }
