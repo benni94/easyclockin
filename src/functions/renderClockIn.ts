@@ -28,16 +28,18 @@ export const renderClockIn = (clockIn: ClockInTypes, username: string, password?
             }
         ],
         [
+            [
 
-            {
-                disabled: clockIn === "login",
-                func: "click",
-                htmlIframe: "Menue",
-                htmlElement: "a",
-                textContent: clockIn === "clockIn" ? "Kommt" : "Geht",
-                textPlacement: "textContent"
-            },
+                {
+                    disabled: clockIn === "login",
+                    func: "click",
+                    htmlIframe: "Menue",
+                    htmlElement: "a",
+                    textContent: clockIn === "clockIn" ? "Kommt" : "Geht",
+                    textPlacement: "textContent"
+                },
 
+            ]
         ]
     )
 }
@@ -67,42 +69,44 @@ export function renderClockInHomeOffice(clockIn: ClockInTypes, username: string,
             }
         ],
         [
+            [
 
-            {
-                disabled: clockIn === "login",
-                func: "click",
-                htmlIframe: "Menue",
-                htmlElement: "a",
-                textContent: clockIn === "clockIn" ? "Kommt mit Grund" : "Geht mit Grund",
-                textPlacement: "textContent",
-            },
-        ],
-        [
-            {
-                disabled: clockIn === "login",
-                func: "select",
-                htmlIframe: "Funktion",
-                htmlElement: "select",
-                textContent: "MGKZ",
-                textPlacement: "name",
-                value: "1"
-            },
-            {
-                disabled: clockIn === "login",
-                func: "click",
-                htmlIframe: "Funktion",
-                htmlElement: "input",
-                textContent: "OK",
-                textPlacement: "value",
-            },
-        ],
+                {
+                    disabled: clockIn === "login",
+                    func: "click",
+                    htmlIframe: "Menue",
+                    htmlElement: "a",
+                    textContent: clockIn === "clockIn" ? "Kommt mit Grund" : "Geht mit Grund",
+                    textPlacement: "textContent",
+                },
+            ],
+            [
+                {
+                    disabled: clockIn === "login",
+                    func: "select",
+                    htmlIframe: "Funktion",
+                    htmlElement: "select",
+                    textContent: "MGKZ",
+                    textPlacement: "name",
+                    value: "1"
+                },
+                {
+                    disabled: clockIn === "login",
+                    func: "click",
+                    htmlIframe: "Funktion",
+                    htmlElement: "input",
+                    textContent: "OK",
+                    textPlacement: "value",
+                },
+            ],
+        ]
     )
 }
 
 
 
-export const linkToPageTest = "http://testphp.vulnweb.com/login.php";
-export function renderClockInHomeOfficeTest(clockIn: ClockInTypes, username: string, password?: string) {
+export const linkToPageT = "http://testphp.vulnweb.com/login.php";
+export function renderClockInHomeOfficeT(clockIn: ClockInTypes, username: string, password?: string) {
     executeClockin(
         [
             {
@@ -127,21 +131,45 @@ export function renderClockInHomeOfficeTest(clockIn: ClockInTypes, username: str
             }
         ],
         [
-            {
-                disabled: clockIn === "login",
-                func: "click",
-                htmlElement: "a",
-                textContent: "artists",
-                textPlacement: "textContent",
-            },
-        ],
-        [
-            {
-                func: "click",
-                htmlElement: "a",
-                textContent: "guestbook",
-                textPlacement: "textContent",
-            },
+            [
+                {
+                    disabled: clockIn === "login",
+                    func: "click",
+                    htmlElement: "a",
+                    textContent: "artists",
+                    textPlacement: "textContent",
+                },
+            ],
+            [
+                {
+                    func: "click",
+                    htmlElement: "a",
+                    textContent: "guestbook",
+                    textPlacement: "textContent",
+                },
+            ],
+            [
+                {
+                    func: "click",
+                    htmlElement: "a",
+                    textContent: "AJAX",
+                    textPlacement: "textContent",
+                },
+            ],
+            [
+                {
+                    func: "click",
+                    htmlElement: "a",
+                    textContent: "setcookie",
+                    textPlacement: "textContent",
+                },
+                {
+                    func: "click",
+                    htmlElement: "a",
+                    textContent: "send",
+                    textPlacement: "textContent",
+                },
+            ]
         ]
     )
 }
