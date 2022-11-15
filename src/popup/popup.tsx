@@ -70,8 +70,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
         style={{ paddingTop: "15px" }}
         content={
           <div className="collapseContent">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              {/*  <Collapse
+            {/*  <Collapse
                 appWidth={appWidth}
                 collapsedWidth={220}
                 collapsedIcon={<SettingsIcon />}
@@ -91,6 +90,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                 labelCollapsed="Advanced:"
                 labelOpen="Advanced:"
               /> */}
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="usernameWrapper">
                 <Input
                   {...(register("username"))}
@@ -195,11 +195,17 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
           <DefaultButton
             onClick={navigate}
             style={{ marginTop: "15px" }}
-            title="Go to url"
+            title="Go to page"
             variant="contained"
           />
         }
       </div>
+      {/*  <div className="boxWrapper">
+        <Box
+          checked={checkBoxClicked().getDataFromLocalStorage()}
+          label="Close page after progress"
+          onChange={e => checkBoxClicked().toLocalStorage(e.target.checked)} />
+      </div> */}
     </>
   );
 };

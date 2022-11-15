@@ -2,6 +2,8 @@ import { FormValues } from "../popup/popup.types";
 
 export const chromeLocalStorageItem = "savings";
 export const clockerClickedState = "clocker";
+export const checkBoxState = "checkbox";
+
 export type Clocker = "clockIn" | "clockOut";
 
 /* export const formValuesDefaults: FormValues = {
@@ -71,6 +73,29 @@ export const clockerClicked = () => {
         const items = localStorage.getItem(clockerClickedState);
         if (!items) return "clockIn";
         return JSON.parse(items);
+    }
+
+    return { toLocalStorage, getDataFromLocalStorage };
+}
+
+export const checkBoxClicked = () => {
+
+    function parseBool(value: string) {
+        if (typeof value === "string") {
+            value = value.replace(/^\s+|\s+$/g, "").toLowerCase();
+            if (value === "true" || value === "false") return value === "true";
+        }
+        return false;
+    }
+
+    const toLocalStorage = (data: boolean) => {
+        return localStorage.setItem(checkBoxState, JSON.stringify(data));
+    }
+
+    const getDataFromLocalStorage: () => boolean = () => {
+        const items = localStorage.getItem(checkBoxState);
+        if (!items) return false;
+        return parseBool(JSON.parse(items));
     }
 
     return { toLocalStorage, getDataFromLocalStorage };
