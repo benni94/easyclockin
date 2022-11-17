@@ -80,22 +80,13 @@ export const clockerClicked = () => {
 
 export const checkBoxClicked = () => {
 
-    function parseBool(value: string) {
-        if (typeof value === "string") {
-            value = value.replace(/^\s+|\s+$/g, "").toLowerCase();
-            if (value === "true" || value === "false") return value === "true";
-        }
-        return false;
-    }
-
     const toLocalStorage = (data: boolean) => {
         return localStorage.setItem(checkBoxState, JSON.stringify(data));
     }
 
     const getDataFromLocalStorage: () => boolean = () => {
         const items = localStorage.getItem(checkBoxState);
-        if (!items) return false;
-        return parseBool(JSON.parse(items));
+        return JSON.parse(items || "");
     }
 
     return { toLocalStorage, getDataFromLocalStorage };

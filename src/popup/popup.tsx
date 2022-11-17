@@ -1,4 +1,4 @@
-import { clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
+import { checkBoxClicked, clockerClicked, formValuesDefaults, savings } from "../functions/savingData";
 import { ClockInTypes, FormValues } from "./popup.types";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
@@ -12,6 +12,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Input } from "../components/Input/input";
 import "./popup.css";
+import { Box } from "../components/checkbox/box";
 
 export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
@@ -116,9 +117,15 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   disabled={!isDirty || !isValid}
                 />
               </div>
+              <Box
+                checked={checkBoxClicked().getDataFromLocalStorage()}
+                fontSize="10px"
+                label="Close page automatically"
+                style={{ alignItems: "center", display: "flex", paddingTop: 20 }}
+                onChange={e => checkBoxClicked().toLocalStorage(e.target.checked)} />
               <Divider
                 style={{ marginLeft: "30px", marginRight: "30px" }}
-                sx={{ height: 20, m: 0.5 }}
+                sx={{ height: 0, m: 0.5 }}
                 orientation="horizontal" />
             </form>
           </div >
@@ -200,12 +207,6 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
           />
         }
       </div>
-      {/*  <div className="boxWrapper">
-        <Box
-          checked={checkBoxClicked().getDataFromLocalStorage()}
-          label="Close page after progress"
-          onChange={e => checkBoxClicked().toLocalStorage(e.target.checked)} />
-      </div> */}
     </>
   );
 };

@@ -1,4 +1,5 @@
 import { FinderArgs, findAndExecuteInDom } from "./finders";
+import { checkBoxClicked } from "./savingData";
 
 export function sendMessageToConsole(func: (arg: chrome.tabs.Tab[]) => void) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -25,7 +26,7 @@ export function executeClockin(args1: FinderArgs[], args2: FinderArgs[][]) {
     let countComplete = 0;
     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       if (changeInfo.status === 'complete') {
-        if (countComplete === args2.length) window.close();
+        if (countComplete === args2.length) { closeWindow(); return; }
         basicFinderScript(args2[countComplete])
           .then(() => {
             countComplete++;
@@ -43,4 +44,16 @@ const basicFinderScript = async (args: FinderArgs[]) => {
       args: [args],
     });
   });
+}
+
+function closeWindow() {
+  if (checkBoxClicked().getDataFromLocalStorage()) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      setTimeout(() => {
+        chrome.tabs.remove(tabs[0].id || 0);
+      }, 2500);
+    });
+  } else {
+    window.close();
+  }
 }

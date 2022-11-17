@@ -52,14 +52,10 @@ export const findAndExecuteInDom = (args: FinderArgs[] | undefined) => {
             if (i === args.length) return true;
         }
         if (arg.func === "click") {
-            setTimeout(() => {
-                matches.filter(filterElements)[0].click();
-            }, 200);
+            matches.filter(filterElements)[0].click();
         }
         if (arg.func === "select") {
-            setTimeout(() => {
-                matches.filter(filterElements)[0].selectedIndex = arg.value;
-            }, 200);
+            matches.filter(filterElements)[0].selectedIndex = arg.value;
         }
     })
     return true;
