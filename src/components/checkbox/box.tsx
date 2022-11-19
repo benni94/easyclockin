@@ -3,6 +3,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { useState } from 'react';
 
 interface ICheckboxProps {
+    color?: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default';
     checked: boolean;
     fontSize?: number | string;
     label: string;
@@ -11,14 +12,12 @@ interface ICheckboxProps {
 }
 
 export const Box: React.FC<ICheckboxProps> = (props) => {
-    const { checked, fontSize, label, onChange, style } = props;
+    const { color, checked, fontSize, label, onChange, style } = props;
     const [isChecked, setIsChecked] = useState(checked);
-
-    console.log('isChecked', checked);
 
     return <FormGroup style={style}>
         <FormControlLabel control={
-            <Checkbox defaultChecked={isChecked}
+            <Checkbox color={color} defaultChecked={isChecked}
                 onChange={(e) => { onChange(e); setIsChecked(e.target.checked) }} />
         }
             label={<Typography style={{ fontSize }}>{label}</Typography>} />

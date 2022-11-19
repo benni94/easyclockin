@@ -6,6 +6,7 @@ type Variant = "contained" | "outlined" | "text";
 type Size = "small" | "medium" | "large";
 
 export type IDefaultButtonProps = {
+  autoFocus?: boolean;
   color?: Color;
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
@@ -19,10 +20,11 @@ export type IDefaultButtonProps = {
 };
 
 const DefaultButton: React.FC<IDefaultButtonProps> = (props) => {
-  const { color, disabled, onClick, onKeyDown, ref, size, style, title, type, variant } = props;
+  const { autoFocus, color, disabled, onClick, onKeyDown, ref, size, style, title, type, variant } = props;
 
   return (
     <Button
+      autoFocus={autoFocus}
       color={color}
       disabled={disabled}
       onClick={onClick}

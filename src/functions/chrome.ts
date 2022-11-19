@@ -1,5 +1,5 @@
-import { FinderArgs, findAndExecuteInDom } from "./finders";
-import { checkBoxClicked } from "./savingData";
+import { findAndExecuteInDom, FinderArgs } from "./renderFinder";
+import { clockerSavings } from "./savingData";
 
 export function sendMessageToConsole(func: (arg: chrome.tabs.Tab[]) => void) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -21,6 +21,13 @@ export async function getCurrentUrl() {
   return tab.url
 }
 
+/**
+ * This function executes the args1 first. If the page loading state is 'complete',
+ * it starts with the first argument in args2.
+ * After the first arg in args2 is executed and the page loading state is complete it takes a look in the next arg from args2.
+ * 
+ * If all args from args2 are done, the closeWindow() will be executed. 
+ */
 export function executeClockin(args1: FinderArgs[], args2: FinderArgs[][]) {
   basicFinderScript(args1).then(() => {
     let countComplete = 0;
@@ -46,12 +53,16 @@ const basicFinderScript = async (args: FinderArgs[]) => {
   });
 }
 
+/**
+ * This function closes the window or the current page if 
+ * the checkbox argument from the chrome storrage is true.
+ */
 function closeWindow() {
-  if (checkBoxClicked().getDataFromLocalStorage()) {
+  if (clockerSavings("checkbox", false).getDataFromLocalStorage()) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       setTimeout(() => {
         chrome.tabs.remove(tabs[0].id || 0);
-      }, 2500);
+      }, clockerSavings("slider", "").getDataFromLocalStorage() * 1000);
     });
   } else {
     window.close();

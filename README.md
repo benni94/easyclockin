@@ -24,3 +24,6 @@ after that, you can build and click in the management extensions `update`
 
 pack it and make it usable in the app store:
 https://github.com/lxieyang/chrome-extension-boilerplate-react
+
+## Change the expiration 
+the renderFinder function in the folder `functions` defines the expiration of the application.
