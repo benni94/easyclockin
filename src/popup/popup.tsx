@@ -9,7 +9,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAlert } from "react-alert";
 import AddIcon from '@mui/icons-material/Add';
 import React, { useCallback, useEffect, useState } from "react";
+// https://mui.com/material-ui/material-icons/?query=Settings+
 import RemoveIcon from '@mui/icons-material/Remove';
+//import SettingsIcon from '@mui/icons-material/Settings';
+//import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { Input } from "../components/Input/input";
 import "./popup.css";
 import { Box } from "../components/checkbox/box";
@@ -71,26 +74,44 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
         style={{ paddingTop: "15px" }}
         content={
           <div className="collapseContent">
-            {/*  <Collapse
-                appWidth={appWidth}
-                collapsedWidth={220}
-                collapsedIcon={<SettingsIcon />}
-                openIcon={<SettingsSuggestIcon />}
-                openWidth={600}
-                content={
-                  <>
-                     <InputAdvanced
-                      register={register}
+            {/*   <Collapse
+              appWidth={appWidth}
+              collapsedWidth={220}
+              collapsedIcon={<SettingsIcon />}
+              openIcon={<SettingsSuggestIcon />}
+              openWidth={600}
+              content={
+                <>
+                   <InputAdvanced
+                    register={register}
+                  />
+                  <div className="usernameWrapper">
+                    <Input
+                      {...(register("username"))}
+                      id="username"
+                      defaultValue={savings().getDataFromLocalStorage().username}
+                      label="Username:"
+                      variant="standard"
+                      width={150}
                     />
-                    <Divider
-                      style={{ marginLeft: "30px", marginRight: "30px" }}
-                      sx={{ height: 20, m: 0.5 }}
-                      orientation="horizontal" />
-                  </>
-                }
-                labelCollapsed="Advanced:"
-                labelOpen="Advanced:"
-              /> */}
+                    <Input
+                      {...(register("username"))}
+                      id="username"
+                      defaultValue={savings().getDataFromLocalStorage().username}
+                      label="Username:"
+                      variant="standard"
+                      width={150}
+                    />
+                  </div>
+                  <Divider
+                    style={{ marginLeft: "30px", marginRight: "30px" }}
+                    sx={{ height: 20, m: 0.5 }}
+                    orientation="horizontal" />
+                </>
+              }
+              labelCollapsed="Advanced:"
+              labelOpen="Advanced:"
+            /> */}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="usernameWrapper">
                 <Input
@@ -132,7 +153,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   max={5}
                   min={0}
                   step={0.5}
-                  style={{ maxWidth: "72%" }}
+                  style={{ width: "160px" }}
                   onChange={(_, v) => clockerSavings("slider", "").toLocalStorage(v.toString())}//e.target.value
                   valueLabelDisplay="auto"
                 />
@@ -171,21 +192,6 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
               {clockedIn === "clockIn" ?
                 <DefaultButton
                   color="success"
-                  onClick={() => homeOfficeClockInClockOut("clockIn")}
-                  style={{ minWidth: "160px", maxWidth: "160px" }}
-                  title="Home in"
-                  variant="outlined"
-                /> :
-                <DefaultButton
-                  color="secondary"
-                  onClick={() => homeOfficeClockInClockOut("clockOut")}
-                  style={{ minWidth: "160px", maxWidth: "160px" }}
-                  title="Home out"
-                  variant="outlined"
-                />}
-              {clockedIn === "clockIn" ?
-                <DefaultButton
-                  color="success"
                   onClick={() => clockInClockOut("clockIn")}
                   style={{ minWidth: "160px", maxWidth: "160px" }}
                   title="Clock in"
@@ -196,6 +202,21 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   onClick={() => clockInClockOut("clockOut")}
                   style={{ minWidth: "160px", maxWidth: "160px" }}
                   title="Clock out"
+                  variant="outlined"
+                />}
+              {clockedIn === "clockIn" ?
+                <DefaultButton
+                  color="success"
+                  onClick={() => homeOfficeClockInClockOut("clockIn")}
+                  style={{ minWidth: "160px", maxWidth: "160px" }}
+                  title="Home in"
+                  variant="outlined"
+                /> :
+                <DefaultButton
+                  color="secondary"
+                  onClick={() => homeOfficeClockInClockOut("clockOut")}
+                  style={{ minWidth: "160px", maxWidth: "160px" }}
+                  title="Home out"
                   variant="outlined"
                 />}
               <DefaultButton
