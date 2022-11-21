@@ -12,7 +12,7 @@ export function sendMessageToConsole(func: (arg: chrome.tabs.Tab[]) => void) {
 }
 
 export function navigateToUrl(url: string) {
-  chrome.tabs.create({ url });
+  chrome.tabs.create({ active: true, url });
 }
 
 export async function getCurrentUrl() {

@@ -189,36 +189,20 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   title="↔️"
                 />
               </div>
-              {clockedIn === "clockIn" ?
-                <DefaultButton
-                  color="success"
-                  onClick={() => clockInClockOut("clockIn")}
-                  style={{ minWidth: "160px", maxWidth: "160px" }}
-                  title="Clock in"
-                  variant="outlined"
-                /> :
-                <DefaultButton
-                  color="secondary"
-                  onClick={() => clockInClockOut("clockOut")}
-                  style={{ minWidth: "160px", maxWidth: "160px" }}
-                  title="Clock out"
-                  variant="outlined"
-                />}
-              {clockedIn === "clockIn" ?
-                <DefaultButton
-                  color="success"
-                  onClick={() => homeOfficeClockInClockOut("clockIn")}
-                  style={{ minWidth: "160px", maxWidth: "160px" }}
-                  title="Home in"
-                  variant="outlined"
-                /> :
-                <DefaultButton
-                  color="secondary"
-                  onClick={() => homeOfficeClockInClockOut("clockOut")}
-                  style={{ minWidth: "160px", maxWidth: "160px" }}
-                  title="Home out"
-                  variant="outlined"
-                />}
+              <DefaultButton
+                color={clockedIn === "clockIn" ? "success" : "secondary"}
+                onClick={() => clockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut")}
+                style={{ minWidth: "160px", maxWidth: "160px" }}
+                title={clockedIn === "clockIn" ? "Clock in" : "Clock out"}
+                variant="outlined"
+              />
+              <DefaultButton
+                color={clockedIn === "clockIn" ? "success" : "secondary"}
+                onClick={() => homeOfficeClockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut")}
+                style={{ minWidth: "160px", maxWidth: "160px" }}
+                title={clockedIn === "clockIn" ? "Home in" : "Home out"}
+                variant="outlined"
+              />
               <DefaultButton
                 onClick={() => clockInClockOut("login")}
                 style={{ minWidth: "160px", maxWidth: "160px" }}

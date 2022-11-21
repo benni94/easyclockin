@@ -166,8 +166,8 @@ export function renderClockInHomeOffice(clockIn: ClockInTypes, username: string,
 
 
 
-export const linkToPageTEST = "http://testphp.vulnweb.com/login.php";
-export function renderClockInHomeOfficeTEST(clockIn: ClockInTypes, username: string, password?: string) {
+export const linkToPageT = "http://testphp.vulnweb.com/login.php";
+export function renderClockInHomeOfficeT(clockIn: ClockInTypes, username: string, password?: string) {
     executeClockin(
         [
             {
