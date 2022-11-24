@@ -9,10 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAlert } from "react-alert";
 import AddIcon from '@mui/icons-material/Add';
 import React, { useCallback, useEffect, useState } from "react";
-// https://mui.com/material-ui/material-icons/?query=Settings+
 import RemoveIcon from '@mui/icons-material/Remove';
-//import SettingsIcon from '@mui/icons-material/Settings';
-//import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import { Input } from "../components/Input/input";
 import "./popup.css";
 import { Box } from "../components/checkbox/box";
@@ -74,44 +71,6 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
         style={{ paddingTop: "15px" }}
         content={
           <div className="collapseContent">
-            {/*   <Collapse
-              appWidth={appWidth}
-              collapsedWidth={220}
-              collapsedIcon={<SettingsIcon />}
-              openIcon={<SettingsSuggestIcon />}
-              openWidth={600}
-              content={
-                <>
-                   <InputAdvanced
-                    register={register}
-                  />
-                  <div className="usernameWrapper">
-                    <Input
-                      {...(register("username"))}
-                      id="username"
-                      defaultValue={savings().getDataFromLocalStorage().username}
-                      label="Username:"
-                      variant="standard"
-                      width={150}
-                    />
-                    <Input
-                      {...(register("username"))}
-                      id="username"
-                      defaultValue={savings().getDataFromLocalStorage().username}
-                      label="Username:"
-                      variant="standard"
-                      width={150}
-                    />
-                  </div>
-                  <Divider
-                    style={{ marginLeft: "30px", marginRight: "30px" }}
-                    sx={{ height: 20, m: 0.5 }}
-                    orientation="horizontal" />
-                </>
-              }
-              labelCollapsed="Advanced:"
-              labelOpen="Advanced:"
-            /> */}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="usernameWrapper">
                 <Input
@@ -148,13 +107,13 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   onChange={e => clockerSavings("checkbox", false).toLocalStorage(e.target.checked)} />
                 <Slider
                   color="secondary"
-                  defaultValue={clockerSavings("slider", "").getDataFromLocalStorage() || 2.5}
+                  defaultValue={clockerSavings("slider", "").getDataFromLocalStorage() || 3}
                   marks
-                  max={5}
+                  max={6}
                   min={0}
-                  step={0.5}
+                  step={1}
                   style={{ width: "160px" }}
-                  onChange={(_, v) => clockerSavings("slider", "").toLocalStorage(v.toString())}//e.target.value
+                  onChange={(_, v) => clockerSavings("slider", "").toLocalStorage(v.toString())}
                   valueLabelDisplay="auto"
                 />
               </div>

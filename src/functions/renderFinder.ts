@@ -165,7 +165,7 @@ export function renderClockInHomeOffice(clockIn: ClockInTypes, username: string,
 }
 
 
-
+// for testing remove the T after the const and function below
 export const linkToPageT = "http://testphp.vulnweb.com/login.php";
 export function renderClockInHomeOfficeT(clockIn: ClockInTypes, username: string, password?: string) {
     executeClockin(
