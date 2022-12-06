@@ -31,6 +31,7 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
         <Button
           startIcon={collapsed ? collapsedIcon : openIcon}
           onClick={collapse}
+          style={{ textTransform: "initial" }}
           title={
             collapsed ? `\u00AD  ${labelCollapsed}` : `\u00AD  ${labelOpen}`
           }

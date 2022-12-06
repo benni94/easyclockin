@@ -1,32 +1,26 @@
-import { FormValues } from "../popup/popup.types";
+type ISavings = "checkbox" | "clocker" | "username" | "slider";
 
-type ISavings = "checkbox" | "clocker" | "savings" | "slider";
+const chromeLocalStorageItem: ISavings = "username";
 
-const chromeLocalStorageItem: ISavings = "savings";
-
-export const formValuesDefaults: FormValues = {
-    username: "",
-}
-
-export const savings = () => {
-    const toLocalStorage = (data: FormValues) => {
-        if (!data.username || data.username === "") {
+export const username = () => {
+    const toLocalStorage = (username: string) => {
+        if (!username || username === "") {
             const dataFromLocalStorrage = getDataFromLocalStorage();
             if (dataFromLocalStorrage === undefined) {
-                return localStorage.setItem(chromeLocalStorageItem, JSON.stringify({ ...formValuesDefaults, username: data.username }));
+                return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(username));
             }
-            return localStorage.setItem(chromeLocalStorageItem, JSON.stringify({ ...dataFromLocalStorrage, username: data.username }));
+            return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(username));
         }
-        return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(data));
+        return localStorage.setItem(chromeLocalStorageItem, JSON.stringify(username));
     }
 
     const removeFromLocalStorage = () => {
-        localStorage.removeItem(chromeLocalStorageItem);
+        localStorage.clear();
     }
 
-    const getDataFromLocalStorage: () => FormValues = () => {
+    const getDataFromLocalStorage: () => string = () => {
         const items = localStorage.getItem(chromeLocalStorageItem);
-        if (!items) return formValuesDefaults;
+        if (!items) return "";
         return JSON.parse(items);
     }
 

@@ -31,12 +31,15 @@ const DefaultButton: React.FC<IDefaultButtonProps> = (props) => {
       onKeyDown={onKeyDown}
       ref={ref}
       size={size}
-      style={style}
+      style={{
+        ...style,
+        textTransform: "initial"
+      }}
       type={type}
       variant={variant}
     >
       {title}
-    </Button>
+    </Button >
   );
 };
 
