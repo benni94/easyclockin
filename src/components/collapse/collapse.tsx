@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
-import React, { ReactNode, useCallback, useState } from "react";
-import { CSSProperties } from "react";
+import React, { CSSProperties, ReactNode, useCallback, useState } from "react";
 import "./collapse.css";
 
 export type ICollapseProps = {
@@ -46,3 +45,4 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
 };
 
 export { Collapse };
+

@@ -1,34 +1,39 @@
-import { clockerSavings, username } from "../functions/savingData";
-import { ClockInTypes, FormValues } from "./popup.types";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { Divider, Slider } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+import { useAlert } from "react-alert";
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { Input } from "../components/Input/input";
+import { Box } from "../components/checkbox/box";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
-import { Divider, Slider } from "@mui/material";
-import { navigateToUrl, getCurrentUrl } from "../functions/chrome";
-import { linkToPage, renderClockIn, renderClockInHomeOffice } from "../functions/renderFinder";
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAlert } from "react-alert";
-import AddIcon from '@mui/icons-material/Add';
-import React, { useCallback, useEffect, useState } from "react";
-import RemoveIcon from '@mui/icons-material/Remove';
-import { Input } from "../components/Input/input";
+import { getCurrentUrl, navigateToUrl } from "../functions/chrome";
+import { renderClockIn, renderClockInHomeOffice } from "../functions/renderFinder";
+import { clockerSavings, url, username } from "../functions/savingData";
 import "./popup.css";
-import { Box } from "../components/checkbox/box";
+import { ClockInTypes, FormValues } from "./popup.types";
 
 export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
   const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
-  const onSubmit: SubmitHandler<FormValues> = result => username().toLocalStorage(result.username);
+  const onSubmit: SubmitHandler<FormValues> = result => {
+    username().toLocalStorage(result.username);
+    url().toLocalStorage(result.url);
+  }
   const [onLoginUrl, setOnLoginUrl] = useState(false);
   const [clockedIn, setClockedIn] = useState(clockerSavings("clocker", "clockIn").getDataFromLocalStorage());
   const alert = useAlert();
 
   useEffect(() => {
+    debugger;
+
     getCurrentUrl().then((currentUrl) => {
-      currentUrl === linkToPage ? setOnLoginUrl(true) : setOnLoginUrl(false);
+      currentUrl === url().getDataFromLocalStorage() ? setOnLoginUrl(true) : setOnLoginUrl(false);
     })
-  }, []);
+  }, [onLoginUrl]);
 
   const navigate = useCallback(() => {
-    navigateToUrl(linkToPage);
+    navigateToUrl(url().getDataFromLocalStorage());
   }, []);
 
   const clear = useCallback(() => {
@@ -79,6 +84,17 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
                   id="username"
                   defaultValue={username().getDataFromLocalStorage()}
                   label="Username:"
+                  variant="standard"
+                  width={150}
+                />
+              </div>
+              <div className="usernameWrapper">
+                <Input
+                  {...(register("url"))}
+                  autoFocus={url().getDataFromLocalStorage().length === 0}
+                  id="url"
+                  defaultValue={url().getDataFromLocalStorage()}
+                  label="Url:"
                   variant="standard"
                   width={150}
                 />
