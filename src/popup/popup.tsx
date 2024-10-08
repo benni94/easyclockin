@@ -1,35 +1,55 @@
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { Divider, Slider } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Slider } from "@mui/material";
 import React, { useCallback, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../components/Input/input";
 import { Box } from "../components/checkbox/box";
 import { Collapse } from "../components/collapse/collapse";
 import { DefaultButton } from "../components/defaultButton/defaultButton";
 import { getCurrentUrl, navigateToUrl } from "../functions/chrome";
-import { renderClockIn, renderClockInHomeOffice } from "../functions/renderFinder";
-import { clockerSavings, url, username } from "../functions/savingData";
+import {
+  renderClockIn,
+  renderClockInHomeOffice,
+} from "../functions/renderFinder";
+import {
+  clockerSavings,
+  password,
+  url,
+  username,
+} from "../functions/savingData";
 import "./popup.css";
 import { ClockInTypes, FormValues } from "./popup.types";
 
-export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth }) => {
-  const { register, handleSubmit, formState: { isDirty, isValid }, reset, getValues } = useForm<FormValues>({ mode: "onChange" });
-  const onSubmit: SubmitHandler<FormValues> = result => {
+export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({
+  appWidth,
+}) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm<FormValues>({ mode: "onChange" });
+  const onSubmit: SubmitHandler<FormValues> = (result) => {
     username().toLocalStorage(result.username);
     url().toLocalStorage(result.url);
-  }
+    password().toLocalStorage(result.password);
+  };
   const [onLoginUrl, setOnLoginUrl] = useState(false);
-  const [clockedIn, setClockedIn] = useState(clockerSavings("clocker", "clockIn").getDataFromLocalStorage());
+  const [clockedIn, setClockedIn] = useState(
+    clockerSavings("clocker", "clockIn").getDataFromLocalStorage()
+  );
   const alert = useAlert();
 
-  useEffect(() => {
-    debugger;
+  const [hasOpenCollapsible, setHasOpenCollapsible] = useState(false);
 
+  useEffect(() => {
     getCurrentUrl().then((currentUrl) => {
-      currentUrl === url().getDataFromLocalStorage() ? setOnLoginUrl(true) : setOnLoginUrl(false);
-    })
+      currentUrl === url().getDataFromLocalStorage()
+        ? setOnLoginUrl(true)
+        : setOnLoginUrl(false);
+    });
   }, [onLoginUrl]);
 
   const navigate = useCallback(() => {
@@ -42,25 +62,46 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
     window.location.reload();
   }, [reset]);
 
-  const switcher = useCallback((shouldChange: boolean) => {
-    if (shouldChange) {
-      const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
-      setClockedIn(clicked);
-      clockerSavings("clocker", "clockIn").toLocalStorage(clicked);
-    }
-  }, [clockedIn]);
+  const switcher = useCallback(
+    (shouldChange: boolean) => {
+      if (shouldChange) {
+        const clicked = clockedIn === "clockIn" ? "clockOut" : "clockIn";
+        setClockedIn(clicked);
+        clockerSavings("clocker", "clockIn").toLocalStorage(clicked);
+      }
+    },
+    [clockedIn]
+  );
 
-  const clockInClockOut = useCallback((clockIn: ClockInTypes) => {
-    const args = username().getDataFromLocalStorage();
-    renderClockIn(clockIn, args, getValues().password);
-    if (clockIn !== "login") clockerSavings("clocker", "clockIn").toLocalStorage(clockedIn === "clockIn" ? "clockOut" : "clockIn");
-  }, [clockedIn, getValues]);
+  const clockInClockOutLogin = useCallback(
+    (clockIn: ClockInTypes) => {
+      renderClockIn(
+        clockIn,
+        username().getDataFromLocalStorage(),
+        password().getDataFromLocalStorage()
+      );
+      if (clockIn !== "login")
+        clockerSavings("clocker", "clockIn").toLocalStorage(
+          clockedIn === "clockIn" ? "clockOut" : "clockIn"
+        );
+    },
+    [clockedIn]
+  );
 
-  const homeOfficeClockInClockOut = useCallback((clockIn: ClockInTypes) => {
-    const args = username().getDataFromLocalStorage();
-    renderClockInHomeOffice(clockIn, args, getValues().password);
-    if (clockIn !== "login") clockerSavings("clocker", "clockIn").toLocalStorage(clockedIn === "clockIn" ? "clockOut" : "clockIn");
-  }, [clockedIn, getValues]);
+  const homeOfficeClockInClockOut = useCallback(
+    (clockIn: ClockInTypes) => {
+      renderClockInHomeOffice(
+        clockIn,
+        username().getDataFromLocalStorage(),
+        password().getDataFromLocalStorage()
+      );
+      if (clockIn !== "login")
+        clockerSavings("clocker", "clockIn").toLocalStorage(
+          clockedIn === "clockIn" ? "clockOut" : "clockIn"
+        );
+    },
+    [clockedIn]
+  );
 
   return (
     <>
@@ -68,6 +109,7 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
         appWidth={appWidth}
         defaultClosed={username().getDataFromLocalStorage().length > 1}
         collapsedIcon={<AddIcon />}
+        isOpen={(open) => setHasOpenCollapsible(open)}
         openIcon={<RemoveIcon />}
         labelCollapsed="Settings:"
         labelOpen="Settings:"
@@ -79,22 +121,34 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="usernameWrapper">
                 <Input
-                  {...(register("username"))}
-                  autoFocus={username().getDataFromLocalStorage().length === 0}
+                  {...register("username")}
+                  autoFocus
                   id="username"
                   defaultValue={username().getDataFromLocalStorage()}
                   label="Username:"
+                  type="text"
                   variant="standard"
                   width={150}
                 />
               </div>
               <div className="usernameWrapper">
                 <Input
-                  {...(register("url"))}
-                  autoFocus={url().getDataFromLocalStorage().length === 0}
+                  {...register("url")}
                   id="url"
                   defaultValue={url().getDataFromLocalStorage()}
                   label="Url:"
+                  type="url"
+                  variant="standard"
+                  width={150}
+                />
+              </div>
+              <div className="usernameWrapper">
+                <Input
+                  {...register("password")}
+                  id="password"
+                  defaultValue={password().getDataFromLocalStorage()}
+                  label="Password:"
+                  type="password"
                   variant="standard"
                   width={150}
                 />
@@ -117,86 +171,102 @@ export const Popup: React.FC<{ appWidth: (size: number) => void }> = ({ appWidth
               <div className="boxSliderWrapper">
                 <Box
                   color="secondary"
-                  checked={clockerSavings("checkbox", false).getDataFromLocalStorage()}
+                  checked={clockerSavings(
+                    "checkbox",
+                    false
+                  ).getDataFromLocalStorage()}
                   fontSize="15px"
                   label="Close page in s:"
-                  style={{ alignItems: "center", display: "flex", paddingTop: 20 }}
-                  onChange={e => clockerSavings("checkbox", false).toLocalStorage(e.target.checked)} />
+                  style={{
+                    alignItems: "center",
+                    display: "flex",
+                    paddingTop: 20,
+                  }}
+                  onChange={(e) =>
+                    clockerSavings("checkbox", false).toLocalStorage(
+                      e.target.checked
+                    )
+                  }
+                />
                 <Slider
                   color="secondary"
-                  defaultValue={clockerSavings("slider", "").getDataFromLocalStorage() || 3}
+                  defaultValue={
+                    clockerSavings("slider", "").getDataFromLocalStorage() || 3
+                  }
                   marks
                   max={6}
                   min={0}
                   step={1}
                   style={{ width: "160px" }}
-                  onChange={(_, v) => clockerSavings("slider", "").toLocalStorage(v.toString())}
+                  onChange={(_, v) =>
+                    clockerSavings("slider", "").toLocalStorage(v.toString())
+                  }
                   valueLabelDisplay="auto"
                 />
               </div>
-              <Divider
-                style={{ marginLeft: "30px", marginRight: "30px", marginTop: "10px" }}
-                sx={{ height: 0, m: 0.5 }}
-                orientation="horizontal" />
             </form>
-          </div >
+          </div>
         }
       />
-      <div className="buttonExecuteWrapper">
-        {onLoginUrl ?
-          <>
-            <div className="bottomElementsWrapper">
-              <div className="bottomActionButtonWrapper">
-                <Input
-                  {...(register("password"))}
-                  autoFocus={username().getDataFromLocalStorage().length > 1}
-                  id="password"
-                  onKeyDown={(e) => { if (e.key === "Enter") { clockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut") } }}
-                  label="Password:"
-                  variant="standard"
-                  type={"password"}
-                  width={120}
+      {!hasOpenCollapsible && (
+        <div className="buttonExecuteWrapper">
+          {onLoginUrl ? (
+            <>
+              <div className="bottomElementsWrapper">
+                <DefaultButton
+                  color={clockedIn === "clockIn" ? "success" : "secondary"}
+                  onClick={() =>
+                    clockInClockOutLogin(
+                      clockedIn === "clockIn" ? "clockIn" : "clockOut"
+                    )
+                  }
+                  size="large"
+                  style={{ width: "160px" }}
+                  title={clockedIn === "clockIn" ? "Clock in" : "Clock out"}
+                  variant="outlined"
                 />
                 <DefaultButton
-                  color="info"
+                  color={clockedIn === "clockIn" ? "success" : "secondary"}
+                  onClick={() =>
+                    homeOfficeClockInClockOut(
+                      clockedIn === "clockIn" ? "clockIn" : "clockOut"
+                    )
+                  }
+                  style={{ width: "160px" }}
+                  size="large"
+                  title={
+                    clockedIn === "clockIn" ? "Home clock in" : "Home clock out"
+                  }
+                  variant="outlined"
+                />
+                <DefaultButton
+                  onClick={() => clockInClockOutLogin("login")}
+                  style={{ width: "160px" }}
+                  size="large"
+                  title="Only login"
+                  variant="outlined"
+                />
+                <DefaultButton
+                  color="secondary"
                   onClick={() => switcher(true)}
-                  style={{ minWidth: "10px", maxWidth: "10px" }}
+                  style={{ marginTop: "-8px" }}
+                  size="medium"
                   variant="text"
-                  title="↔️"
+                  title="◄ ►"
                 />
               </div>
-              <DefaultButton
-                color={clockedIn === "clockIn" ? "success" : "secondary"}
-                onClick={() => clockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut")}
-                style={{ minWidth: "160px", maxWidth: "160px" }}
-                title={clockedIn === "clockIn" ? "Clock in" : "Clock out"}
-                variant="outlined"
-              />
-              <DefaultButton
-                color={clockedIn === "clockIn" ? "success" : "secondary"}
-                onClick={() => homeOfficeClockInClockOut(clockedIn === "clockIn" ? "clockIn" : "clockOut")}
-                style={{ minWidth: "160px", maxWidth: "160px", padding: 6 }}
-                title={clockedIn === "clockIn" ? "Homeoffice clock in" : "Homeoffice clock out"}
-                variant="outlined"
-              />
-              <DefaultButton
-                onClick={() => clockInClockOut("login")}
-                style={{ minWidth: "160px", maxWidth: "160px" }}
-                title="Only login"
-                variant="outlined"
-              />
-            </div>
-          </>
-          :
-          <DefaultButton
-            autoFocus={username().getDataFromLocalStorage().length > 1}
-            onClick={navigate}
-            style={{ marginTop: 15, minWidth: "160px", maxWidth: "160px" }}
-            title="Go to page"
-            variant="outlined"
-          />
-        }
-      </div>
+            </>
+          ) : (
+            <DefaultButton
+              autoFocus={username().getDataFromLocalStorage().length > 1}
+              onClick={navigate}
+              style={{ minWidth: "160px", maxWidth: "160px" }}
+              title="Go to page"
+              variant="outlined"
+            />
+          )}
+        </div>
+      )}
     </>
   );
 };

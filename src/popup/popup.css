@@ -10,19 +10,13 @@ button {
     display: flex;
     flex-direction: column;
     gap: 17px;
-    align-items: center;
-}
-
-.bottomActionButtonWrapper {
-    display: flex;
-    flex-direction: row;
-    gap: 13px;
+    align-items: end;
 }
 
 .buttonExecuteWrapper {
     display: flex;
     justify-content: space-evenly;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 25px;
 }
 

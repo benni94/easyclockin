@@ -1,5 +1,5 @@
 export type FormValues = {
-  password?: string;
+  password: string;
   username: string;
   url: string;
 };

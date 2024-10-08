@@ -8,6 +8,7 @@ export type ICollapseProps = {
   collapsedIcon: React.ReactNode;
   content: ReactNode;
   collapsedWidth: number;
+  isOpen: (open: boolean) => void;
   labelOpen?: string;
   labelCollapsed: string;
   openIcon: React.ReactNode;
@@ -16,13 +17,26 @@ export type ICollapseProps = {
 };
 
 const Collapse: React.FC<ICollapseProps> = (props) => {
-  const { appWidth, defaultClosed = true, collapsedIcon, content, collapsedWidth, labelCollapsed, labelOpen, openIcon, openWidth, style } = props;
+  const {
+    appWidth,
+    defaultClosed = true,
+    collapsedIcon,
+    isOpen,
+    content,
+    collapsedWidth,
+    labelCollapsed,
+    labelOpen,
+    openIcon,
+    openWidth,
+    style,
+  } = props;
   const [collapsed, setCollapsed] = useState(defaultClosed);
 
   const collapse = useCallback(() => {
     setCollapsed((collapsed) => !collapsed);
+    isOpen(collapsed);
     !collapsed ? appWidth(collapsedWidth) : appWidth(openWidth);
-  }, [appWidth, collapsed, collapsedWidth, openWidth]);
+  }, [appWidth, collapsed, collapsedWidth, isOpen, openWidth]);
 
   return (
     <div style={style}>
@@ -45,4 +59,3 @@ const Collapse: React.FC<ICollapseProps> = (props) => {
 };
 
 export { Collapse };
-

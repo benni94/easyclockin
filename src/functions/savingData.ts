@@ -1,7 +1,14 @@
-type ISavings = "checkbox" | "clocker" | "username" | "url" | "slider";
+type ISavings =
+  | "checkbox"
+  | "clocker"
+  | "password"
+  | "username"
+  | "url"
+  | "slider";
 
-const chromeLocalStorageItem: ISavings = "username";
+const chromeLocalStorageItemUsername: ISavings = "username";
 const chromeLocalStorageUrl: ISavings = "url";
+const chromeLocalStorageItemPassword: ISavings = "password";
 
 export const username = () => {
   const toLocalStorage = (username: string) => {
@@ -9,17 +16,17 @@ export const username = () => {
       const dataFromLocalStorrage = getDataFromLocalStorage();
       if (dataFromLocalStorrage === undefined) {
         return localStorage.setItem(
-          chromeLocalStorageItem,
+          chromeLocalStorageItemUsername,
           JSON.stringify(username)
         );
       }
       return localStorage.setItem(
-        chromeLocalStorageItem,
+        chromeLocalStorageItemUsername,
         JSON.stringify(username)
       );
     }
     return localStorage.setItem(
-      chromeLocalStorageItem,
+      chromeLocalStorageItemUsername,
       JSON.stringify(username)
     );
   };
@@ -29,7 +36,7 @@ export const username = () => {
   };
 
   const getDataFromLocalStorage: () => string = () => {
-    const items = localStorage.getItem(chromeLocalStorageItem);
+    const items = localStorage.getItem(chromeLocalStorageItemUsername);
     if (!items) return "";
     return JSON.parse(items);
   };
@@ -55,6 +62,41 @@ export const url = () => {
 
   const getDataFromLocalStorage: () => string = () => {
     const items = localStorage.getItem(chromeLocalStorageUrl);
+    if (!items) return "";
+    return JSON.parse(items);
+  };
+
+  return { getDataFromLocalStorage, removeFromLocalStorage, toLocalStorage };
+};
+
+export const password = () => {
+  const toLocalStorage = (password: string) => {
+    console.log("password", password);
+    if (!password || password === "") {
+      const dataFromLocalStorrage = getDataFromLocalStorage();
+      if (dataFromLocalStorrage === undefined) {
+        return localStorage.setItem(
+          chromeLocalStorageItemUsername,
+          JSON.stringify(password)
+        );
+      }
+      return localStorage.setItem(
+        chromeLocalStorageItemPassword,
+        JSON.stringify(password)
+      );
+    }
+    return localStorage.setItem(
+      chromeLocalStorageItemPassword,
+      JSON.stringify(password)
+    );
+  };
+
+  const removeFromLocalStorage = () => {
+    localStorage.clear();
+  };
+
+  const getDataFromLocalStorage: () => string = () => {
+    const items = localStorage.getItem(chromeLocalStorageItemPassword);
     if (!items) return "";
     return JSON.parse(items);
   };
